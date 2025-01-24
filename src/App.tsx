@@ -1,53 +1,96 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github, Instagram, Twitter, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-function App() {
+export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#171738] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto flex flex-col gap-2 min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)]">
+      <div className="max-w-7xl mx-auto space-y-4">
         {/* Navbar */}
         <motion.nav 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative flex justify-between items-center bg-[#DDE2C6] rounded-2xl px-4 sm:px-6 py-4"
+          className="flex justify-between items-center bg-[#DDE2C6] rounded-2xl px-4 py-3 relative"
         >
-          <div className="text-xl font-serif text-[#A72608]">Rodney Mutwiri</div>
+          <div className="text-[#A72608]">Rodney Mutwiri</div>
           
           {/* Mobile Menu Button */}
           <button 
-            className="sm:hidden text-[#171738] hover:text-[#A72608]"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden p-2 hover:bg-[#171738]/5 rounded-lg transition-colors"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6 text-[#171738]" />
+            ) : (
+              <Menu className="w-6 h-6 text-[#171738]" />
+            )}
           </button>
 
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute top-full left-0 right-0 mt-2 bg-[#DDE2C6] rounded-2xl p-4 sm:hidden flex flex-col gap-4 shadow-lg z-50"
-            >
-              <a href="#about" className="text-[#171738] hover:text-[#A72608] text-center">ABOUT</a>
-              <a href="#projects" className="text-[#171738] hover:text-[#A72608] text-center">PROJECTS</a>
-              <a href="#contact" className="text-[#171738] hover:text-[#A72608] text-center">CONTACT</a>
-            </motion.div>
-          )}
-
-          {/* Desktop Menu */}
-          <div className="hidden sm:flex gap-8 text-sm">
-            <a href="#about" className="text-[#171738] hover:text-[#A72608]">ABOUT</a>
-            <a href="#projects" className="text-[#171738] hover:text-[#A72608]">PROJECTS</a>
-            <a href="#contact" className="text-[#171738] hover:text-[#A72608]">CONTACT</a>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex gap-8 text-sm">
+            <Link to="/" className="text-[#171738] hover:text-[#A72608]">HOME</Link>
+            <Link to="/about" className="text-[#171738] hover:text-[#A72608]">ABOUT</Link>
+            <Link to="/projects" className="text-[#171738] hover:text-[#A72608]">PROJECTS</Link>
+            <Link to="/contact" className="text-[#A72608] hover:text-[#DDE2C6]">CONTACT</Link>
           </div>
+
+          {/* Mobile Menu Overlay */}
+          <motion.div
+            initial={false}
+            animate={isMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+            className={`${
+              isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+            } absolute top-full left-0 right-0 mt-2 lg:hidden z-50`}
+          >
+            <motion.div
+              initial={false}
+              animate={isMenuOpen ? { opacity: 1 } : { opacity: 0 }}
+              className="bg-[#171738] rounded-xl shadow-lg p-4"
+            >
+              <div className="flex flex-col space-y-3">
+                <Link 
+                  to="/" 
+                  className="text-[#DDE2C6] hover:text-[#A72608] text-sm font-medium px-2 py-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  HOME
+                </Link>
+                <Link 
+                  to="/about" 
+                  className="text-[#DDE2C6] hover:text-[#A72608] text-sm font-medium px-2 py-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  ABOUT
+                </Link>
+                <Link 
+                  to="/projects" 
+                  className="text-[#DDE2C6] hover:text-[#A72608] text-sm font-medium px-2 py-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  PROJECTS
+                </Link>
+                <Link 
+                  to="/contact" 
+                  className="text-[#A72608] hover:text-[#DDE2C6] text-sm font-medium px-2 py-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  CONTACT
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
         </motion.nav>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-10 auto-rows-[minmax(100px,auto)] gap-3 flex-1">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-10 auto-rows-[minmax(100px,auto)] gap-3 flex-1"
+        >
           {/* Hero Section */}
           <motion.div 
             initial={{ opacity: 0, x: -100 }}
@@ -60,9 +103,9 @@ function App() {
             className="col-span-1 sm:col-span-4 lg:col-span-4 row-span-3 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#171738] leading-tight">
-              Let's create digital{' '}
-              <span className="text-[#A72608] font-italic">experiences</span>{' '}
-              for your next project
+              I Build{' '}
+              <span className="text-[#A72608] font-italic">Innovative Digital Solutions</span>{' '}
+              Tailored Exactly to What You Need
             </h1>
           </motion.div>
 
@@ -74,7 +117,7 @@ function App() {
               duration: 0.5,
               ease: "easeOut"
             }}
-            className="col-span-1 sm:col-span-2 lg:col-span-2 row-span-3 bg-[#171738] rounded-2xl overflow-hidden"
+            className="col-span-1 sm:col-span-2 lg:col-span-2 row-span-3 rounded-2xl overflow-hidden"
           >
             <motion.img 
               initial={{ scale: 1.1 }}
@@ -143,19 +186,13 @@ function App() {
             className="col-span-1 sm:col-span-3 lg:col-span-3 flex flex-col gap-3 min-h-[200px]"
           >
             {/* Contact Card */}
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.5,
-                delay: 0.7,
-                ease: "easeOut"
-              }}
-              className="flex-1 bg-[#171738] rounded-2xl p-6 text-[#DDE2C6] flex items-center justify-between hover:bg-[#A72608] transition-colors cursor-pointer group"
+            <Link
+              to="/contact"
+              className="bg-[#A72608] hover:bg-[#171738] p-6 rounded-2xl flex items-center justify-between group transition-colors"
             >
-              <h3 className="text-xl sm:text-2xl font-serif">Contact <em className="not-italic">me</em></h3>
-              <ExternalLink className="w-5 h-5 transform group-hover:rotate-45 transition-transform" />
-            </motion.div>
+              <span className="text-[#DDE2C6] group-hover:text-[#A72608] text-xl sm:text-2xl font-medium transition-colors">Contact me</span>
+              <ExternalLink className="w-5 h-5 text-[#DDE2C6] group-hover:text-[#A72608] transform group-hover:rotate-45 transition-all" />
+            </Link>
 
             {/* Social Links */}
             <motion.div 
@@ -179,10 +216,8 @@ function App() {
               </a>
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 }
-
-export default App;
