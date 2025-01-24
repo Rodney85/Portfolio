@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import App from './App'
 import './index.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Contact } from './pages/Contact.tsx'
-import Projects from './pages/Projects.tsx'
-import About from './pages/About.tsx'
-import { Layout } from './components/Layout.tsx'
+import { Contact } from './pages/Contact'
+import Projects from './pages/Projects'
+import About from './pages/About'
+import { Layout } from './components/Layout'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/projects" element={<Layout><Projects /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
       </Routes>
     </Router>
   </React.StrictMode>,
