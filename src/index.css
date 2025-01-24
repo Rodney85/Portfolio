@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-900;
+  }
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Smooth transitions */
+a, button {
+  @apply transition-all duration-200;
+}
+
+/* Border bottom animation for nav links */
+nav a {
+  @apply relative;
+}
+
+nav a::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-px bg-neutral-900 transition-all duration-200;
+}
+
+nav a:hover::after {
+  @apply w-full;
+}
