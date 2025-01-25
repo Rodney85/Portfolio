@@ -7,19 +7,36 @@ import { Send } from 'lucide-react';
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
-  message: z.string().min(10, 'Message must be at least 10 characters')
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+  budget: z.string().min(1, 'Please select a budget range')
 });
 
 type ContactForm = z.infer<typeof contactSchema>;
 
 export const Contact = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ContactForm>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema)
   });
 
   const onSubmit = (data: ContactForm) => {
-    console.log(data);
-    // Handle form submission
+    const message = {
+      id: crypto.randomUUID(),
+      ...data,
+      status: 'unread',
+      createdAt: new Date().toISOString()
+    };
+
+    // Get existing messages
+    const existingMessages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
+    
+    // Add new message
+    localStorage.setItem('contact_messages', JSON.stringify([message, ...existingMessages]));
+    
+    // Reset form
+    reset();
+    
+    // Show success message
+    alert('Message sent successfully!');
   };
 
   return (
@@ -73,16 +90,34 @@ export const Contact = () => {
           
           <div className="mb-6">
             <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-              Message
+              Tell me more about your project
             </label>
             <textarea
               {...register('message')}
               rows={4}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              placeholder="Your message here..."
             />
             {errors.message && (
               <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+              Project Budget
+            </label>
+            <select
+              {...register('budget')}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            >
+              <option value="">Select a budget range</option>
+              <option value="$1,000 - $5,000">$1,000 - $5,000</option>
+              <option value="$5,000 - $10,000">$5,000 - $10,000</option>
+              <option value="$10,000 - $20,000">$10,000 - $20,000</option>
+              <option value="$20,000+">$20,000+</option>
+            </select>
+            {errors.budget && (
+              <p className="mt-1 text-sm text-red-600">{errors.budget.message}</p>
             )}
           </div>
           

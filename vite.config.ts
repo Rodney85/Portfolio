@@ -13,4 +13,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  define: {
+    'process.env.VITE_CONVEX_URL': JSON.stringify('https://chatty-stoat-742.convex.cloud')
+  }
 });
