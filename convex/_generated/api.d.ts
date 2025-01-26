@@ -14,7 +14,6 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as contacts from "../contacts.js";
-import type * as notifications from "../notifications.js";
 import type * as projects from "../projects.js";
 
 /**
@@ -27,7 +26,6 @@ import type * as projects from "../projects.js";
  */
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
-  notifications: typeof notifications;
   projects: typeof projects;
 }>;
 export declare const api: FilterApi<

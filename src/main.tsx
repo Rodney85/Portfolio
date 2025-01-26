@@ -9,19 +9,22 @@ import About from './pages/About'
 import { Admin } from './pages/Admin'
 import { Layout } from './components/Layout'
 import { ConvexClientProvider } from './convex/ConvexClientProvider'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ConvexClientProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/projects" element={<Layout><Projects /></Layout>} />
-          <Route path="/about" element={<Layout><About /></Layout>} />
-          <Route path="/contact" element={<Layout><Contact /></Layout>} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </Router>
-    </ConvexClientProvider>
+    <ErrorBoundary>
+      <ConvexClientProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/projects" element={<Layout><Projects /></Layout>} />
+            <Route path="/about" element={<Layout><About /></Layout>} />
+            <Route path="/contact" element={<Layout><Contact /></Layout>} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </Router>
+      </ConvexClientProvider>
+    </ErrorBoundary>
   </React.StrictMode>,
 )
