@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { 
   FolderKanban, 
   MessageSquare, 
-  BarChart3,
-  LogOut
+  BarChart3
 } from 'lucide-react';
 import { ProjectManagement } from './ProjectManagement';
 import { MessageManagement } from './MessageManagement';
@@ -11,24 +10,12 @@ import { MessageManagement } from './MessageManagement';
 type Tab = 'projects' | 'messages' | 'analytics';
 
 export function Dashboard() {
-  const [activeTab, setActiveTab] = useState<Tab>('projects');
-
-  const handleLogout = () => {
-    localStorage.removeItem('admin_credentials');
-    window.location.reload();
-  };
+  const [activeTab, setActiveTab] = useState<Tab>('messages');
 
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-      <div className="flex justify-between items-center mb-8">
+      <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center px-4 py-2 text-sm text-red-600 hover:text-red-800"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </button>
       </div>
 
       <div className="bg-white rounded-lg shadow">

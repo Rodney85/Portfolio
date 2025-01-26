@@ -16,7 +16,7 @@ interface LoginProps {
   onLogin: () => void;
 }
 
-// Admin credentials - in production these should be environment variables
+// Admin credentials
 const ADMIN_USERNAME = 'itsrod852';
 const ADMIN_PASSWORD = 'Qazxsw852#';
 
