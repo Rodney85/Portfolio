@@ -1,6 +1,5 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { api } from "./_generated/api";
 
 // Submit a new contact form
 export const submit = mutation({
@@ -18,10 +17,6 @@ export const submit = mutation({
       createdAt: Date.now(),
       read: false,
     });
-
-    // Send push notification
-    await ctx.scheduler.runAfter(0, api.notifications.sendPushNotification, args);
-
     return contactId;
   },
 });
