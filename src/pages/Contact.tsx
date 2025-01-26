@@ -1,19 +1,30 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Globe, Layout, Smartphone, Sparkles } from 'lucide-react';
+import { Globe, Layout, Smartphone, Sparkles, Send } from 'lucide-react';
 
 export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     projectType: '',
-    budget: '',
-    details: ''
+    message: '',
+    budget: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
+    // You can add your form submission logic here
+    alert('Message sent successfully!');
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      projectType: '',
+      message: '',
+      budget: ''
+    });
   };
 
   return (
@@ -46,6 +57,7 @@ export function Contact() {
               <input
                 type="text"
                 id="name"
+                required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
@@ -61,10 +73,27 @@ export function Contact() {
               <input
                 type="email"
                 id="email"
+                required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
                 placeholder="you@example.com"
+              />
+            </div>
+
+            {/* Phone Field */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-[#171738] mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                required
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
+                placeholder="+1 (123) 456-7890"
               />
             </div>
 
@@ -141,30 +170,47 @@ export function Contact() {
               </div>
             </div>
 
-            {/* Project Details */}
+            {/* Message Field */}
             <div>
-              <label htmlFor="details" className="block text-sm font-medium text-[#171738] mb-2">
+              <label htmlFor="message" className="block text-sm font-medium text-[#171738] mb-2">
                 Tell me more about your project
               </label>
               <textarea
-                id="details"
-                value={formData.details}
-                onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                id="message"
+                required
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 rows={4}
                 className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
                 placeholder="Share your vision, goals, and any specific requirements..."
               />
             </div>
 
-            {/* Submit Button */}
+            {/* Budget Field */}
             <div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-8 py-3 bg-[#171738] hover:bg-[#A72608] text-[#DDE2C6] rounded-lg transition-colors"
-              >
-                Send Message
-              </button>
+              <label htmlFor="budget" className="block text-sm font-medium text-[#171738] mb-2">
+                Project Budget
+              </label>
+              <input
+                type="text"
+                id="budget"
+                required
+                value={formData.budget}
+                onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
+                placeholder="Enter your budget"
+              />
             </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="w-full bg-[#A72608] text-white py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-[#8C1C06] transition-colors"
+            >
+              <Send size={20} />
+              Send Message
+            </motion.button>
           </form>
         </motion.div>
       </div>

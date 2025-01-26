@@ -7,6 +7,7 @@ import { Send } from 'lucide-react';
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
+  phone: z.string().min(10, 'Please enter a valid phone number'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   budget: z.string().min(1, 'Please select a budget range')
 });
@@ -89,6 +90,21 @@ export const Contact = () => {
           </div>
           
           <div className="mb-6">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+              Phone Number
+            </label>
+            <input
+              {...register('phone')}
+              type="tel"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              placeholder="+1 (123) 456-7890"
+            />
+            {errors.phone && (
+              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+            )}
+          </div>
+          
+          <div className="mb-6">
             <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
               Tell me more about your project
             </label>
@@ -110,11 +126,12 @@ export const Contact = () => {
               {...register('budget')}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             >
-              <option value="">Select a budget range</option>
-              <option value="$1,000 - $5,000">$1,000 - $5,000</option>
+              <option value="">Select budget range</option>
+              <option value="< $5,000">Less than $5,000</option>
               <option value="$5,000 - $10,000">$5,000 - $10,000</option>
-              <option value="$10,000 - $20,000">$10,000 - $20,000</option>
-              <option value="$20,000+">$20,000+</option>
+              <option value="$10,000 - $25,000">$10,000 - $25,000</option>
+              <option value="$25,000 - $50,000">$25,000 - $50,000</option>
+              <option value="> $50,000">More than $50,000</option>
             </select>
             {errors.budget && (
               <p className="mt-1 text-sm text-red-600">{errors.budget.message}</p>
