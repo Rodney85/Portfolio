@@ -1,12 +1,14 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { ConvexError } from "convex/values";
+import { QueryBuilder } from "convex/server";
 
 // List all projects
 export const list = query({
   handler: async (ctx) => {
     const projects = await ctx.db.query("projects")
-      .order("createdAt", "desc")
+      .withIndex("by_createdAt")
+      .order("desc")
       .collect();
     return projects;
   },

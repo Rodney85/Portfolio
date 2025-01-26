@@ -9,7 +9,7 @@ export default defineSchema({
     url: v.string(), // Project URL
     createdAt: v.number(), // Change to number for timestamp
     updatedAt: v.number(), // Change to number for timestamp
-  }),
+  }).index("by_createdAt", ["createdAt"]),
   
   contacts: defineTable({
     name: v.string(),
