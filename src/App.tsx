@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Github, Instagram, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
+import { LatestWorkCard } from './components/LatestWorkCard';
+import profileImage from './assets/shawar.jpg';
 
 export default function App() {
   return (
@@ -50,7 +52,7 @@ export default function App() {
                 duration: 0.5,
                 ease: "easeOut"
               }}
-              src="/src/assets/shawar.jpg"
+              src={profileImage}
               alt="Rodney Mutwiri"
               className="w-full h-full object-cover object-center"
             />
@@ -67,17 +69,7 @@ export default function App() {
             }}
             className="col-span-1 sm:col-span-6 lg:col-span-4 row-span-4 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px]"
           >
-            <div className="flex flex-col h-full">
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="font-serif text-lg text-[#A72608]">Latest Work</h4>
-                <ExternalLink className="w-4 h-4 text-[#171738]" />
-              </div>
-              <div className="space-y-3 text-sm flex-grow">
-                <div className="border-b border-[#171738]/20 pb-2 text-[#171738] hover:text-[#A72608] cursor-pointer transition-colors">E-Commerce Platform</div>
-                <div className="border-b border-[#171738]/20 pb-2 text-[#171738] hover:text-[#A72608] cursor-pointer transition-colors">AI Analytics Dashboard</div>
-                <div className="text-[#171738] hover:text-[#A72608] cursor-pointer transition-colors">Cloud Infrastructure</div>
-              </div>
-            </div>
+            <LatestWorkCard />
           </motion.div>
 
           {/* Bio Card */}
