@@ -6,7 +6,7 @@ import { ConvexError } from "convex/values";
 export const list = query({
   handler: async (ctx) => {
     const projects = await ctx.db.query("projects")
-      .order("desc")
+      .order("createdAt", "desc")
       .collect();
     return projects;
   },
