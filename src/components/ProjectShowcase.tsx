@@ -2,20 +2,23 @@ import { ProjectGrid } from "@/components/ui/layout-grid";
 import { motion } from "framer-motion";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { useState } from "react";
 
 export function ProjectShowcase() {
-  const [error, setError] = useState<string | null>(null);
-  
   // Fetch projects from Convex with error handling
-  const projects = useQuery(api.projects.list, {
-    onError: (e) => {
-      console.error("Error fetching projects:", e);
-      setError(e.message);
-    }
-  }) || [];
+  const projects = useQuery(api.projects.list);
 
-  if (error) {
+  if (projects === undefined) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-4xl font-bold mb-6 text-[#DDE2C6]">Loading...</h2>
+        <p className="text-[#DDE2C6]/80 mb-4">
+          Please wait while we fetch the projects.
+        </p>
+      </div>
+    );
+  }
+
+  if (projects === null) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h2 className="text-4xl font-bold mb-6 text-[#DDE2C6]">Oops!</h2>
