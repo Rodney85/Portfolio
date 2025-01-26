@@ -6,8 +6,10 @@ export const submit = mutation({
   args: {
     name: v.string(),
     email: v.string(),
-    subject: v.string(),
+    phone: v.string(),
+    projectType: v.string(),
     message: v.string(),
+    budget: v.string(),
   },
   handler: async (ctx, args) => {
     const contactId = await ctx.db.insert("contacts", {

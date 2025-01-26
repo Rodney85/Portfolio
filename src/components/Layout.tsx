@@ -1,4 +1,5 @@
 import { Navbar } from './Navbar';
+import { Toaster } from 'sonner';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Navbar />
         {/* Page Content */}
         {children}
+        <Toaster richColors />
       </div>
     </div>
   );

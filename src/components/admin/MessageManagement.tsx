@@ -1,53 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MailOpen, Trash2, Clock } from 'lucide-react';
+import { Mail, MailOpen, Clock, Phone, Briefcase } from 'lucide-react';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
+import { Id } from '../../../convex/_generated/dataModel';
 
 type Message = {
-  id: string;
+  _id: Id<"contacts">;
+  _creationTime: number;
   name: string;
   email: string;
+  phone: string;
+  projectType: string;
   message: string;
   budget: string;
-  status: 'read' | 'unread';
-  createdAt: string;
+  read: boolean;
 };
 
 export function MessageManagement() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const messages = useQuery(api.contacts.list) || [];
+  const markAsRead = useMutation(api.contacts.markAsRead);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
 
-  useEffect(() => {
-    const storedMessages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
-    setMessages(storedMessages);
-  }, []);
-
-  const markAsRead = (id: string) => {
-    const updatedMessages = messages.map((msg) =>
-      msg.id === id ? { ...msg, status: 'read' as const } : msg
-    );
-    localStorage.setItem('contact_messages', JSON.stringify(updatedMessages));
-    setMessages(updatedMessages);
-  };
-
-  const deleteMessage = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this message?')) {
-      const updatedMessages = messages.filter((msg) => msg.id !== id);
-      localStorage.setItem('contact_messages', JSON.stringify(updatedMessages));
-      setMessages(updatedMessages);
-      if (selectedMessage?.id === id) {
-        setSelectedMessage(null);
-      }
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp).toLocaleDateString('en-US', {
+      month: 'short',
       day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const formatTime = (timestamp: number) => {
+    return new Date(timestamp).toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const handleMarkAsRead = async (id: Id<"contacts">) => {
+    await markAsRead({ id });
   };
 
   return (
@@ -57,84 +48,110 @@ export function MessageManagement() {
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold">Messages</h3>
           <p className="text-sm text-gray-500">
-            {messages.filter((m) => m.status === 'unread').length} unread
+            {messages.filter((m) => !m.read).length} unread
           </p>
         </div>
         {messages.map((message) => (
           <motion.div
-            key={message.id}
+            key={message._id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className={`p-4 border-b border-gray-200 cursor-pointer ${
-              selectedMessage?.id === message.id ? 'bg-indigo-50' : ''
+              selectedMessage?._id === message._id ? 'bg-indigo-50' : ''
             } hover:bg-gray-50`}
-            onClick={() => setSelectedMessage(message)}
+            onClick={() => {
+              setSelectedMessage(message);
+              if (!message.read) {
+                handleMarkAsRead(message._id);
+              }
+            }}
           >
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex items-center">
-                {message.status === 'unread' ? (
-                  <Mail className="w-4 h-4 text-indigo-600 mr-2" />
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center space-x-2">
+                {!message.read ? (
+                  <Mail className="w-4 h-4 text-indigo-600" />
                 ) : (
-                  <MailOpen className="w-4 h-4 text-gray-400 mr-2" />
+                  <MailOpen className="w-4 h-4 text-gray-400" />
                 )}
-                <h4 className="font-medium">{message.name}</h4>
-              </div>
-              <div className="flex items-center text-sm text-gray-500">
-                <Clock className="w-4 h-4 mr-1" />
-                {formatDate(message.createdAt)}
+                <span className="font-medium">{message.name}</span>
               </div>
             </div>
-            <p className="text-sm text-gray-600 truncate">{message.message}</p>
+            <div className="flex items-center text-xs text-gray-500 space-x-2">
+              <Clock className="w-3 h-3" />
+              <span>{formatDate(message._creationTime)}</span>
+              <span>•</span>
+              <span>{formatTime(message._creationTime)}</span>
+            </div>
           </motion.div>
         ))}
       </div>
 
       {/* Message Detail */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto bg-gray-50">
         {selectedMessage ? (
           <div className="p-6">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h2 className="text-2xl font-bold mb-2">{selectedMessage.name}</h2>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
-                  <a
-                    href={`mailto:${selectedMessage.email}`}
-                    className="hover:text-indigo-600"
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">{selectedMessage.name}</h2>
+                  <div className="flex flex-col space-y-2 text-sm text-gray-500">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="w-4 h-4" />
+                      <a
+                        href={`mailto:${selectedMessage.email}`}
+                        className="hover:text-indigo-600"
+                      >
+                        {selectedMessage.email}
+                      </a>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Phone className="w-4 h-4" />
+                      <a
+                        href={`tel:${selectedMessage.phone}`}
+                        className="hover:text-indigo-600"
+                      >
+                        {selectedMessage.phone}
+                      </a>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="w-4 h-4" />
+                      <span>{selectedMessage.projectType}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-medium">Budget:</span>
+                      <span className="text-green-600 font-medium">{selectedMessage.budget}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end space-y-2">
+                  <button
+                    onClick={() => setSelectedMessage(null)}
+                    className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-full transition-colors"
                   >
-                    {selectedMessage.email}
-                  </a>
-                  <span>•</span>
-                  <span>{formatDate(selectedMessage.createdAt)}</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  <div className="text-sm text-gray-500 text-right">
+                    {formatDate(selectedMessage._creationTime)}
+                    <br />
+                    {formatTime(selectedMessage._creationTime)}
+                  </div>
                 </div>
               </div>
-              <div className="flex space-x-2">
-                {selectedMessage.status === 'unread' && (
-                  <button
-                    onClick={() => markAsRead(selectedMessage.id)}
-                    className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-md"
-                  >
-                    <MailOpen className="w-5 h-5" />
-                  </button>
-                )}
-                <button
-                  onClick={() => deleteMessage(selectedMessage.id)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-md"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
+              <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                <h3 className="text-lg font-semibold mb-2">Message</h3>
+                <p className="whitespace-pre-wrap text-gray-700">{selectedMessage.message}</p>
               </div>
-            </div>
-
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <div className="text-sm font-medium text-gray-500 mb-1">
-                Project Budget
-              </div>
-              <div className="text-lg font-medium">{selectedMessage.budget}</div>
-            </div>
-
-            <div className="prose max-w-none">
-              <h3 className="text-lg font-medium mb-2">Message</h3>
-              <p className="whitespace-pre-wrap">{selectedMessage.message}</p>
             </div>
           </div>
         ) : (

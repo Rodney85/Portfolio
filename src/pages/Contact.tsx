@@ -1,8 +1,12 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Globe, Layout, Smartphone, Sparkles, Send } from 'lucide-react';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { toast } from 'sonner';
 
 export function Contact() {
+  const submitContact = useMutation(api.contacts.submit);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,19 +16,47 @@ export function Contact() {
     budget: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
-    // You can add your form submission logic here
-    alert('Message sent successfully!');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      projectType: '',
-      message: '',
-      budget: ''
-    });
+    
+    // Show loading toast
+    const loadingToast = toast.loading('Sending your message...');
+    
+    try {
+      await submitContact({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        projectType: formData.projectType || 'Not specified',
+        message: formData.message,
+        budget: formData.budget ? `$${formData.budget} USD` : 'Not specified'
+      });
+
+      // Reset form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        projectType: '',
+        message: '',
+        budget: ''
+      });
+
+      // Dismiss loading toast and show success
+      toast.dismiss(loadingToast);
+      toast.success('Message sent successfully! I will get back to you soon.', {
+        duration: 5000,
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      // Dismiss loading toast and show error
+      toast.dismiss(loadingToast);
+      toast.error('Failed to send message. Please try again.', {
+        duration: 5000,
+        position: 'bottom-right',
+      });
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
@@ -198,7 +230,7 @@ export function Contact() {
                 value={formData.budget}
                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg bg-white border border-[#171738]/10 focus:outline-none focus:ring-2 focus:ring-[#A72608] text-[#171738]"
-                placeholder="Enter your budget"
+                placeholder="Enter your budget (e.g. $1000)"
               />
             </div>
 

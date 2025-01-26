@@ -14,8 +14,10 @@ export default defineSchema({
   contacts: defineTable({
     name: v.string(),
     email: v.string(),
-    subject: v.string(),
+    phone: v.string(),
+    projectType: v.string(),
     message: v.string(),
+    budget: v.string(),
     createdAt: v.number(),
     read: v.boolean(),
   }),
