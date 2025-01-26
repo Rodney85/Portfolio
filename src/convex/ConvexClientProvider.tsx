@@ -13,6 +13,14 @@ function getConvexUrl(): string {
   const url = rawUrl.replace(/["']/g, '').trim();
   console.log('Cleaned URL:', url);
 
+  // Handle deployment key format (prod:name|key)
+  if (url.startsWith('prod:')) {
+    const deploymentId = url.split('|')[0].replace('prod:', '');
+    const finalUrl = `https://${deploymentId}.convex.cloud`;
+    console.log('Final URL from deployment key:', finalUrl);
+    return finalUrl;
+  }
+
   // If URL already has protocol, use it as is
   if (url.startsWith('https://') || url.startsWith('http://')) {
     return url;
