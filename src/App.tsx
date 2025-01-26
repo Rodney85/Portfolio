@@ -84,9 +84,9 @@ export default function App() {
             className="col-span-1 sm:col-span-3 lg:col-span-3 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 flex flex-col justify-center min-h-[200px]"
           >
             <p className="text-sm text-[#171738] leading-relaxed">
-              Full-stack developer specializing in crafting modern web applications. 
-              With expertise in React, Node.js, and cloud architecture, I transform ideas into 
-              scalable digital solutions.
+              Full-stack developer leveraging AI to build scalable web applications. 
+              Specializing in React, Node.js, and intelligent cloud solutions that drive 
+              business growth.
             </p>
           </motion.div>
 

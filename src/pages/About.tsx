@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Twitter, Linkedin, Mail, Code, Sparkles, Lightbulb, Brain, Rocket } from "lucide-react";
-import { SocialLink } from "@/components/ui/social-link";
+import { Code, Sparkles, Lightbulb, Brain, Rocket } from "lucide-react";
 import { LogoCarousel } from "@/components/ui/logo-carousel";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,7 @@ export default function About() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="max-w-4xl mx-auto py-12 px-4 space-y-16"
+      className="max-w-4xl mx-auto py-12 px-6 sm:px-8 space-y-16 overflow-x-hidden"
     >
       {/* Who I Am Section */}
       <motion.section
@@ -212,12 +211,12 @@ export default function About() {
         </div>
       </motion.section>
 
-      {/* Call to Action */}
-      <motion.section
+      {/* Contact Button */}
+      <motion.div 
+        className="flex justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        className="text-center pt-8"
       >
         <motion.div
           whileHover={{ scale: 1.05 }}
@@ -225,12 +224,12 @@ export default function About() {
         >
           <Button
             onClick={() => navigate("/contact")}
-            className="bg-gradient-to-r from-[#DDE2C6] to-[#C2C7AB] text-[#1C1F37] hover:from-[#DDE2C6]/90 hover:to-[#C2C7AB]/90 text-lg px-8 py-6 shadow-lg"
+            className="bg-gradient-to-r from-[#DDE2C6] to-[#C2C7AB] text-[#1C1F37] hover:from-[#DDE2C6]/90 hover:to-[#C2C7AB]/90 text-lg px-6 py-3 shadow-lg"
           >
-            Let's Turn Your Tech Challenges into Opportunities
+            Contact Me
           </Button>
         </motion.div>
-      </motion.section>
+      </motion.div>
     </motion.div>
   );
 }
