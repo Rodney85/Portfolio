@@ -67,7 +67,7 @@ export function Contact() {
       className="flex flex-col gap-4 min-h-[calc(100vh-8rem)]"
     >
       {/* Contact Form */}
-      <div className="flex-1 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8">
+      <div className="flex-1 bg-custom-beige rounded-2xl p-6 sm:p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

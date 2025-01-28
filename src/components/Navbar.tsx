@@ -12,14 +12,14 @@ export function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="flex justify-between items-center bg-[#DDE2C6] rounded-2xl px-4 py-3 relative"
+      className="flex justify-between items-center bg-custom-beige rounded-2xl px-4 py-3 relative"
     >
       <Link to="/" className="text-[#A72608]">Rodney Mutwiri</Link>
       
       {/* Mobile Menu Button */}
       <button 
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="lg:hidden p-2 hover:bg-[#171738]/5 rounded-lg transition-colors"
+        className="lg:hidden p-2 hover:bg-custom-beige/5 rounded-lg transition-colors"
       >
         {isMenuOpen ? (
           <X className="w-6 h-6 text-[#171738]" />

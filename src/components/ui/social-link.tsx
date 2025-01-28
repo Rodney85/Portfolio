@@ -14,8 +14,8 @@ export function SocialLink({ href, icon, variant = 'default' }: SocialLinkProps)
       rel="noopener noreferrer"
       className={
         variant === 'default'
-          ? "p-3 rounded-xl bg-[#DDE2C6] text-[#171738] hover:bg-[#DDE2C6]/90 transition-colors"
-          : "p-2 rounded-full bg-[#DDE2C6]/10 text-[#DDE2C6] hover:bg-[#DDE2C6]/20 transition-colors"
+          ? "p-3 rounded-xl bg-custom-beige text-[#171738] hover:bg-custom-beige/90 transition-colors"
+          : "p-2 rounded-full bg-custom-beige/10 text-custom-beige hover:bg-custom-beige/20 transition-colors"
       }
     >
       {icon}

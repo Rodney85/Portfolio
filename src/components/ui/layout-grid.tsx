@@ -17,7 +17,7 @@ export const ProjectGrid = ({ projects }: { projects: Project[] }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -5 }}
-            className="bg-[#DDE2C6]/10 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-[#DDE2C6]/20"
+            className="bg-custom-beige/10 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-custom-beige/20"
           >
             <div className="aspect-video relative overflow-hidden">
               {project.thumbnail && (
@@ -34,10 +34,10 @@ export const ProjectGrid = ({ projects }: { projects: Project[] }) => {
               )}
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-2 text-[#DDE2C6]">
+              <h3 className="text-xl font-semibold mb-2 text-custom-beige">
                 {project.title}
               </h3>
-              <p className="text-[#DDE2C6]/80 mb-4 line-clamp-2">
+              <p className="text-custom-beige/80 mb-4 line-clamp-2">
                 {project.description}
               </p>
               {project.url && (
@@ -45,7 +45,7 @@ export const ProjectGrid = ({ projects }: { projects: Project[] }) => {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-[#DDE2C6] hover:text-[#FF4D4D] transition-colors duration-200 bg-[#DDE2C6]/10 px-4 py-2 rounded-lg hover:bg-[#DDE2C6]/20"
+                  className="inline-flex items-center gap-2 text-custom-beige hover:text-[#FF4D4D] transition-colors duration-200 bg-custom-beige/10 px-4 py-2 rounded-lg hover:bg-custom-beige/20"
                 >
                   View Project <ExternalLink className="w-4 h-4" />
                 </a>

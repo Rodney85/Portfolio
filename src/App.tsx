@@ -32,7 +32,7 @@ export default function App() {
               delay: 0.3,
               ease: "easeOut"
             }}
-            className="col-span-1 sm:col-span-4 lg:col-span-4 row-span-3 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
+            className="col-span-1 sm:col-span-4 lg:col-span-4 row-span-3 bg-custom-beige rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#171738] leading-tight">
               I Build{' '}
@@ -73,7 +73,7 @@ export default function App() {
               delay: 0.4,
               ease: "easeOut"
             }}
-            className="col-span-1 sm:col-span-6 lg:col-span-4 row-span-4 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px]"
+            className="col-span-1 sm:col-span-6 lg:col-span-4 row-span-4 bg-custom-beige rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px]"
           >
             <LatestWorkCard />
           </motion.div>
@@ -87,7 +87,7 @@ export default function App() {
               delay: 0.5,
               ease: "easeOut"
             }}
-            className="col-span-1 sm:col-span-3 lg:col-span-3 bg-[#DDE2C6] rounded-2xl p-6 sm:p-8 flex flex-col justify-center min-h-[200px]"
+            className="col-span-1 sm:col-span-3 lg:col-span-3 bg-custom-beige rounded-2xl p-6 sm:p-8 flex flex-col justify-center min-h-[200px]"
           >
             <p className="text-sm text-[#171738] leading-relaxed">
               Full-stack developer leveraging AI to build scalable web applications. 
@@ -125,7 +125,7 @@ export default function App() {
                 delay: 0.8,
                 ease: "easeOut"
               }}
-              className="flex-1 bg-[#DDE2C6] rounded-2xl py-3 px-6 flex justify-center items-center gap-8"
+              className="flex-1 bg-custom-beige rounded-2xl py-3 px-6 flex justify-center items-center gap-8"
             >
               <a href="#" className="text-[#171738] hover:text-[#A72608] transition-colors">
                 <Github className="w-4 h-4" />
