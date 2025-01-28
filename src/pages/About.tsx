@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Code, Sparkles, Lightbulb, Brain, Rocket } from "lucide-react";
-import { LogoCarousel } from "@/components/ui/logo-carousel";
-import { Button } from "@/components/ui/button";
+import { LogoCarousel } from "../components/ui/logo-carousel";
+import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 export default function About() {

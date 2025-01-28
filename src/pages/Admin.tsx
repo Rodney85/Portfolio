@@ -6,7 +6,7 @@ import { LogOut } from 'lucide-react';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-export function Admin() {
+const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -64,4 +64,6 @@ export function Admin() {
       <Dashboard />
     </motion.div>
   );
-}
+};
+
+export default Admin;

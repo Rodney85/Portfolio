@@ -5,7 +5,7 @@ import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { toast } from 'sonner';
 
-export function Contact() {
+const Contact = () => {
   const submitContact = useMutation(api.contacts.submit);
   const [formData, setFormData] = useState({
     name: '',
@@ -248,4 +248,6 @@ export function Contact() {
       </div>
     </motion.div>
   );
-}
+};
+
+export default Contact;
