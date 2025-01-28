@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { LatestWorkCard } from './components/LatestWorkCard';
 import profileImage from './assets/shawar.jpg';
+import { preloadImage } from './utils/imageLoader';
+import React from 'react';
 
 export default function App() {
+  React.useEffect(() => {
+    preloadImage(profileImage);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#171738] p-4 sm:p-6">
       <div className="max-w-7xl mx-auto space-y-4">
