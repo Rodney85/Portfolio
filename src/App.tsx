@@ -29,11 +29,15 @@ const HomePage = () => (
         delay: 0.3,
         ease: "easeOut"
       }}
-      className="col-span-1 sm:col-span-4 lg:col-span-4 row-span-3 bg-custom-beige rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center"
+      className="col-span-1 sm:col-span-4 lg:col-span-4 row-span-3 bg-gradient-to-br from-[#93C5B5] to-[#93C5B5]/90 rounded-2xl p-6 sm:p-8 relative overflow-hidden flex flex-col justify-center shadow-lg shadow-[#134E4A]/10 backdrop-blur-sm"
     >
-      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#171738] leading-tight">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+      <h1 className="relative z-10 text-4xl sm:text-5xl lg:text-6xl font-serif text-[#134E4A] leading-tight">
         I Build{' '}
-        <span className="text-[#A72608] font-italic">Innovative Digital Solutions</span>{' '}
+        <span className="text-[#FF7F6B] font-italic relative">
+          Innovative Digital Solutions
+          <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-[#FF7F6B]/20" />
+        </span>{' '}
         Tailored Exactly to What You Need
       </h1>
     </motion.div>
@@ -46,7 +50,7 @@ const HomePage = () => (
         duration: 0.5,
         ease: "easeOut"
       }}
-      className="col-span-1 sm:col-span-2 lg:col-span-2 row-span-3 rounded-2xl overflow-hidden"
+      className="col-span-1 sm:col-span-2 lg:col-span-2 row-span-3 rounded-2xl overflow-hidden shadow-lg shadow-[#134E4A]/10"
     >
       <motion.img 
         initial={{ scale: 1.1 }}
@@ -57,7 +61,7 @@ const HomePage = () => (
         }}
         src={profileImage}
         alt="Rodney Mutwiri"
-        className="w-full h-full object-cover object-center"
+        className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
       />
     </motion.div>
 
@@ -70,7 +74,7 @@ const HomePage = () => (
         delay: 0.4,
         ease: "easeOut"
       }}
-      className="col-span-1 sm:col-span-6 lg:col-span-4 row-span-4 bg-custom-beige rounded-2xl p-6 sm:p-8 flex flex-col justify-between min-h-[300px]"
+      className="col-span-1 sm:col-span-6 lg:col-span-4 row-span-4 rounded-2xl overflow-hidden shadow-lg shadow-[#134E4A]/10"
     >
       <LatestWorkCard />
     </motion.div>
@@ -84,9 +88,10 @@ const HomePage = () => (
         delay: 0.5,
         ease: "easeOut"
       }}
-      className="col-span-1 sm:col-span-3 lg:col-span-3 bg-custom-beige rounded-2xl p-6 sm:p-8 flex flex-col justify-center min-h-[200px]"
+      className="col-span-1 sm:col-span-3 lg:col-span-3 bg-gradient-to-br from-[#93C5B5] to-[#93C5B5]/90 rounded-2xl p-6 sm:p-8 flex flex-col justify-center min-h-[200px] shadow-lg shadow-[#134E4A]/10 backdrop-blur-sm relative group"
     >
-      <p className="text-sm text-[#171738] leading-relaxed">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+      <p className="relative z-10 text-sm text-[#134E4A] leading-relaxed">
         Full-stack developer leveraging AI to build scalable web applications. 
         Specializing in React, Node.js, and intelligent cloud solutions that drive 
         business growth.
@@ -107,10 +112,11 @@ const HomePage = () => (
       {/* Contact Card */}
       <Link
         to="/contact"
-        className="bg-[#171738] hover:bg-[#A72608] p-6 rounded-2xl flex items-center justify-between group transition-colors"
+        className="bg-gradient-to-r from-[#134E4A] to-[#134E4A]/90 hover:from-[#FF7F6B] hover:to-[#FF7F6B]/90 p-6 rounded-2xl flex items-center justify-between group transition-all duration-300 shadow-lg shadow-[#134E4A]/10 backdrop-blur-sm relative overflow-hidden"
       >
-        <span className="text-[#DDE2C6] group-hover:text-[#171738] text-xl sm:text-2xl font-medium transition-colors">Contact me</span>
-        <ExternalLink className="w-5 h-5 text-[#DDE2C6] group-hover:text-[#171738] transform group-hover:rotate-45 transition-all" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+        <span className="relative z-10 text-[#E8D5C4] group-hover:text-[#134E4A] text-xl sm:text-2xl font-medium transition-colors">Contact me</span>
+        <ExternalLink className="relative z-10 w-5 h-5 text-[#E8D5C4] group-hover:text-[#134E4A] transform group-hover:rotate-45 transition-all" />
       </Link>
 
       {/* Social Links */}
@@ -122,15 +128,16 @@ const HomePage = () => (
           delay: 0.8,
           ease: "easeOut"
         }}
-        className="flex-1 bg-custom-beige rounded-2xl py-3 px-6 flex justify-center items-center gap-8"
+        className="flex-1 bg-gradient-to-br from-[#93C5B5] to-[#93C5B5]/90 rounded-2xl py-3 px-6 flex justify-center items-center gap-8 shadow-lg shadow-[#134E4A]/10 backdrop-blur-sm relative"
       >
-        <a href="#" className="text-[#171738] hover:text-[#A72608] transition-colors">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+        <a href="#" className="relative z-10 text-[#134E4A] hover:text-[#FF7F6B] transition-all hover:scale-110">
           <Github className="w-4 h-4" />
         </a>
-        <a href="#" className="text-[#171738] hover:text-[#A72608] transition-colors">
+        <a href="#" className="relative z-10 text-[#134E4A] hover:text-[#FF7F6B] transition-all hover:scale-110">
           <Twitter className="w-4 h-4" />
         </a>
-        <a href="#" className="text-[#171738] hover:text-[#A72608] transition-colors">
+        <a href="#" className="relative z-10 text-[#134E4A] hover:text-[#FF7F6B] transition-all hover:scale-110">
           <Instagram className="w-4 h-4" />
         </a>
       </motion.div>
@@ -144,12 +151,13 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#171738] p-4 sm:p-6">
-      <div className="max-w-7xl mx-auto space-y-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#134E4A] via-[#134E4A] to-[#134E4A]/95 p-4 sm:p-6 relative">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+      <div className="max-w-7xl mx-auto space-y-4 relative">
         <Navbar />
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-custom-beige"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#93C5B5]"></div>
           </div>
         }>
           <Routes>

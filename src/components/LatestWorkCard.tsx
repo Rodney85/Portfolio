@@ -34,23 +34,27 @@ export function LatestWorkCard() {
   const currentProject = recentProjects[currentIndex];
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex justify-between items-center mb-4">
-        <h4 className="font-serif text-lg text-[#A72608]">Featured Projects</h4>
+    <div className="h-full w-full relative group">
+      {/* Featured Projects Title */}
+      <div className="absolute top-6 left-6 right-6 z-30 flex justify-between items-center">
+        <h4 className="font-serif text-lg text-[#FF7F6B] drop-shadow-sm">Featured Projects</h4>
         <div className="flex gap-2">
           {recentProjects.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                index === currentIndex ? 'bg-[#A72608]' : 'bg-[#171738]/20'
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? 'bg-[#FF7F6B] w-6' 
+                  : 'bg-[#134E4A]/20 hover:bg-[#FF7F6B]/50'
               }`}
             />
           ))}
         </div>
       </div>
-      
-      <div className="flex-grow relative">
+
+      {/* Project Cards */}
+      <div className="h-full w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentProject._id}
@@ -58,70 +62,71 @@ export function LatestWorkCard() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="absolute inset-0"
+            className="h-full w-full"
           >
             <motion.a
               href={currentProject.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block w-full h-full"
+              className="group block w-full h-full bg-gradient-to-br from-[#134E4A] to-[#134E4A]/90 relative"
             >
-              <div className="relative w-full h-full bg-[#171738] rounded-2xl overflow-hidden">
-                {/* Background Image with Overlay */}
-                <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-                  {currentProject.thumbnail && (
-                    <div className="relative w-full h-full">
-                      {/* Dark overlay */}
-                      <div className="absolute inset-0 bg-[#171738]/40 z-10" />
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#171738] via-[#171738]/90 to-[#171738]/60 z-10" />
-                      <img
-                        src={currentProject.thumbnail}
-                        alt={currentProject.title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          img.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="relative z-20 h-full p-8 flex flex-col justify-between">
-                  <div className="max-w-[65%]">
-                    <motion.h3 
-                      className="text-3xl font-medium text-[#DDE2C6] mb-4 leading-tight drop-shadow-sm"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      {currentProject.title}
-                    </motion.h3>
-                    <motion.p 
-                      className="text-base text-[#DDE2C6]/90 line-clamp-3 leading-relaxed backdrop-blur-[2px] rounded-lg"
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      {currentProject.description}
-                    </motion.p>
+              {/* Background Image with Overlay */}
+              <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+                {currentProject.thumbnail && (
+                  <div className="relative w-full h-full">
+                    {/* Dark overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#134E4A]/30 to-[#134E4A]/60 z-10" />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#134E4A]/90 via-[#134E4A]/40 to-transparent z-10" />
+                    <img
+                      src={currentProject.thumbnail}
+                      alt={currentProject.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const img = e.target as HTMLImageElement;
+                        img.style.display = 'none';
+                      }}
+                    />
                   </div>
+                )}
+              </div>
 
-                  <motion.div
+              {/* Grid Pattern */}
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] z-20" />
+
+              {/* Content */}
+              <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end">
+                <div>
+                  <motion.h3 
+                    className="text-2xl font-medium text-[#93C5B5] mb-2 drop-shadow-sm"
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="flex items-center gap-3"
+                    transition={{ delay: 0.2 }}
                   >
-                    <span className="relative text-sm font-medium text-[#DDE2C6] group-hover:text-[#A72608] transition-colors">
-                      <span className="relative z-10">View Project</span>
-                      <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#A72608] group-hover:w-full transition-all duration-300" />
-                    </span>
-                    <ExternalLink className="w-4 h-4 transform group-hover:rotate-45 group-hover:text-[#A72608] transition-all" />
-                  </motion.div>
+                    {currentProject.title}
+                  </motion.h3>
+                  <motion.p 
+                    className="text-sm text-[#E8D5C4] line-clamp-2 mb-4 drop-shadow-sm"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {currentProject.description}
+                  </motion.p>
                 </div>
+
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex items-center gap-2 self-end relative"
+                >
+                  <div className="absolute -left-12 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#93C5B5]/30 to-[#93C5B5]/10" />
+                  <span className="text-sm font-medium text-[#93C5B5] group-hover:text-[#FF7F6B] transition-all group-hover:translate-x-1">
+                    View Project
+                  </span>
+                  <ExternalLink className="w-4 h-4 text-[#93C5B5] group-hover:text-[#FF7F6B] transform group-hover:rotate-45 transition-all" />
+                </motion.div>
               </div>
             </motion.a>
           </motion.div>
