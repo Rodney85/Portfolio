@@ -74,6 +74,13 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Improved text contrast & readability */
+  p, li {
+    @apply text-foreground font-medium;
   }
 }
 
@@ -95,14 +102,30 @@
   }
   
   .paragraph {
-    @apply text-base md:text-lg leading-relaxed text-muted-foreground;
+    @apply text-base md:text-lg leading-relaxed text-foreground;
+    letter-spacing: -0.011em;
   }
   
   .nav-link {
-    @apply text-foreground/80 hover:text-primary transition-colors duration-200;
+    @apply text-foreground hover:text-primary transition-colors duration-200;
   }
   
   .nav-link-active {
     @apply text-primary font-medium;
+  }
+  
+  /* Animation classes */
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  .pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
   }
 }
