@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Code, Smartphone, Layout, Bot } from 'lucide-react';
+import { ArrowRight, Star, Users, Clock, Code, Smartphone, Layout as LayoutIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SectionHeading from '@/components/ui/section-heading';
@@ -25,74 +25,148 @@ const Home = () => {
       description: "High-performance, responsive web applications built with modern frameworks like React and Next.js."
     },
     {
-      icon: <Layout className="w-10 h-10 text-tech-light-purple" />,
+      icon: <LayoutIcon className="w-10 h-10 text-tech-light-purple" />,
       title: "Landing Page Design",
       description: "Conversion-optimized landing pages focused on delivering your brand message and generating leads."
     },
+  ];
+
+  const workExperience = [
     {
-      icon: <Bot className="w-10 h-10 text-tech-deep-blue" />,
-      title: "AI Workflow Automation",
-      description: "Custom automation workflows using n8n and make.com to streamline processes and reduce manual tasks."
-    }
+      position: "Senior Full Stack Developer",
+      company: "TechFusion",
+      period: "2020 - Present",
+    },
+    {
+      position: "Mobile App Developer",
+      company: "InnovateApps",
+      period: "2018 - 2020",
+    },
+    {
+      position: "Web Developer",
+      company: "CreativeSolutions",
+      period: "2016 - 2018",
+    },
+  ];
+
+  const testimonials = [
+    {
+      text: "Rodney delivered an exceptional mobile application that exceeded our expectations. His attention to detail and technical expertise were invaluable.",
+      author: "Sarah Johnson",
+      company: "TechStart Inc.",
+      rating: 5,
+    },
+    {
+      text: "Working with Rodney was a pleasure. He understood our requirements perfectly and delivered a polished product on time and within budget.",
+      author: "Michael Chang",
+      company: "InnovateCo",
+      rating: 5,
+    },
+    {
+      text: "Rodney's ability to translate our ideas into a functional web application was impressive. Highly recommended for any development project.",
+      author: "Lisa Rodriguez",
+      company: "CreativeMinds",
+      rating: 5,
+    },
+  ];
+
+  const stats = [
+    { number: "50+", label: "Projects" },
+    { number: "30+", label: "Clients" },
+    { number: "5+", label: "Years" },
   ];
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="py-16 md:py-24">
-        <div className="container-custom">
+      {/* Hero Section with Orange Circle Background */}
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-orange-400 to-orange-500 opacity-90 -translate-y-1/2 translate-x-1/4 z-0"></div>
+        
+        <div className="container-custom relative z-10">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             <div className="flex-1 text-center lg:text-left">
-              <motion.h1 
-                className="heading-xl mb-4"
+              <motion.p 
+                className="text-lg font-medium text-tech-purple mb-1"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                Transforming Ideas Into
-                <span className="bg-gradient-to-r from-tech-purple to-tech-blue bg-clip-text text-transparent"> Digital Reality</span>
-              </motion.h1>
+                I'm
+              </motion.p>
               
-              <motion.p 
-                className="paragraph max-w-2xl mx-auto lg:mx-0"
+              <motion.h1 
+                className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                Rodney Mutwiri
+              </motion.h1>
+              
+              <motion.h2 
+                className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6 bg-gradient-to-r from-tech-purple to-tech-blue bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Product Developer
+              </motion.h2>
+              
+              <motion.p 
+                className="paragraph max-w-2xl mx-auto lg:mx-0 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
                 I build exceptional mobile apps, web applications, landing pages, and create powerful AI automation workflows that help businesses grow.
               </motion.p>
               
               <motion.div 
-                className="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start"
+                className="flex flex-wrap gap-4 justify-center lg:justify-start"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <Link to="/projects">
-                  <Button size="lg">
+                  <Button size="lg" className="bg-orange-500 hover:bg-orange-600">
                     View Projects <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 
                 <Link to="/contact">
                   <Button variant="outline" size="lg">
-                    Get in Touch
+                    Contact Me
                   </Button>
                 </Link>
+              </motion.div>
+
+              {/* Rating Stats */}
+              <motion.div 
+                className="mt-8 flex items-center justify-center lg:justify-start"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star key={star} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <span className="ml-2 text-sm font-medium">10+ Years</span>
               </motion.div>
             </div>
             
             <motion.div 
               className="flex-1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <div className="rounded-lg overflow-hidden border border-border/50 shadow-lg">
+              <div className="relative">
                 <img 
-                  src="https://placehold.co/600x400/7c3aed/FFFFFF/png?text=Developer+Portfolio" 
-                  alt="Portfolio Preview" 
-                  className="w-full h-auto"
+                  src="https://placehold.co/600x600/ffffff/000000.png?text=Rodney+Mutwiri" 
+                  alt="Rodney Mutwiri" 
+                  className="w-full max-w-md mx-auto rounded-full object-cover z-10 relative"
                 />
               </div>
             </motion.div>
@@ -100,15 +174,56 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-16 bg-secondary/50">
+      {/* Work Experience Timeline */}
+      <section className="py-16 bg-secondary/30">
         <div className="container-custom">
           <SectionHeading
-            title="What I Do"
+            title="My Work Experience"
+            subtitle="My professional journey in the tech industry"
+          />
+          
+          <div className="relative max-w-3xl mx-auto mt-12">
+            {/* Timeline center line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-orange-500"></div>
+            
+            {workExperience.map((experience, index) => (
+              <motion.div 
+                key={experience.company}
+                className="relative flex items-center justify-between mb-12 last:mb-0"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <div className={`w-5/12 pr-8 text-right ${index % 2 !== 0 ? 'order-last' : ''}`}>
+                  <h3 className="font-bold text-lg">{experience.position}</h3>
+                  <p className="text-muted-foreground">{experience.company}</p>
+                </div>
+                
+                <div className="z-10">
+                  <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">{index + 1}</span>
+                  </div>
+                </div>
+                
+                <div className={`w-5/12 pl-8 ${index % 2 === 0 ? 'order-last' : ''}`}>
+                  <p className="font-medium">{experience.period}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-16">
+        <div className="container-custom">
+          <SectionHeading
+            title="Why Hire Me?"
             subtitle="Specialized services focusing on delivering value to your business"
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
@@ -129,18 +244,35 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
+
+          {/* Stats */}
+          <div className="mt-16 grid grid-cols-3 gap-4">
+            {stats.map((stat, index) => (
+              <motion.div 
+                key={stat.label}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-3xl md:text-4xl font-bold text-orange-500">{stat.number}</p>
+                <p className="text-muted-foreground">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Featured Projects Section */}
-      <section className="py-16">
+      <section className="py-16 bg-secondary/30">
         <div className="container-custom">
           <SectionHeading 
-            title="Featured Projects"
+            title="Let's have a look at my Portfolio"
             subtitle="Check out some of my recent work"
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredProjects.map((project, index) => (
               <ProjectCard key={project.id} project={project} index={index} />
             ))}
@@ -148,7 +280,7 @@ const Home = () => {
           
           <div className="mt-12 text-center">
             <Link to="/projects">
-              <Button variant="outline" size="lg">
+              <Button className="bg-orange-500 hover:bg-orange-600" size="lg">
                 View All Projects <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -156,21 +288,100 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-primary/10">
+      {/* Testimonials Section */}
+      <section className="py-16 bg-[#1A1F2C] text-white">
         <div className="container-custom">
-          <div className="rounded-lg p-8 md:p-10 lg:p-12 bg-gradient-to-r from-tech-purple/90 to-tech-blue/90 text-white">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="heading-lg mb-4">Ready to bring your idea to life?</h2>
-              <p className="paragraph text-white/80 mb-8">
-                Let's collaborate to create something amazing together. Whether you need a mobile app, web application, or an automated workflow.
-              </p>
-              <Link to="/contact">
-                <Button variant="secondary" size="lg">
-                  Let's Talk About Your Project
-                </Button>
-              </Link>
+          <SectionHeading 
+            title="Testimonials That"
+            subtitle="What clients say about working with me"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gray-800/50 p-6 rounded-lg"
+              >
+                <div className="flex mb-4">
+                  {Array(5).fill(0).map((_, i) => (
+                    <Star 
+                      key={i} 
+                      className={`h-5 w-5 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} 
+                    />
+                  ))}
+                </div>
+                <p className="mb-4 text-gray-300">{testimonial.text}</p>
+                <div>
+                  <p className="font-bold">{testimonial.author}</p>
+                  <p className="text-sm text-gray-400">{testimonial.company}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Project Inquiry Section */}
+      <section className="py-16 bg-orange-50">
+        <div className="container-custom">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-6 md:mb-0">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Have an Awesome Project Idea?</h2>
+              <p className="text-muted-foreground">Let's discuss and bring your vision to life</p>
             </div>
+            <Link to="/contact">
+              <Button className="bg-orange-500 hover:bg-orange-600" size="lg">
+                Let's Talk
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Work Section */}
+      <section className="py-16">
+        <div className="container-custom">
+          <SectionHeading 
+            title="From my Journal"
+            subtitle="Check out my latest case studies and articles"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((item) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: item * 0.1 }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <div className="overflow-hidden rounded-lg mb-4">
+                  <img 
+                    src={`https://placehold.co/600x400/7c3aed/FFFFFF.png?text=Case+Study+${item}`} 
+                    alt={`Case Study ${item}`} 
+                    className="w-full h-48 object-cover transition-transform group-hover:scale-105 duration-300"
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Case Study {item}: Mobile App Development</h3>
+                <p className="text-muted-foreground mb-4">How I helped a startup launch their flagship mobile application</p>
+                <Link to={`/case-study-${item}`}>
+                  <Button variant="link" className="p-0 h-auto text-orange-500">
+                    Read More <ArrowRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="mt-12 text-center">
+            <Button className="bg-orange-500 hover:bg-orange-600">
+              View All Articles
+            </Button>
           </div>
         </div>
       </section>
