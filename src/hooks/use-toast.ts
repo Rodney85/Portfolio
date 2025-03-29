@@ -1,5 +1,6 @@
-import * as React from "react"
 
+// This file contains the implementation for toast functionality
+import * as React from "react"
 import type {
   ToastActionElement,
   ToastProps,
