@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from "./components/theme/ThemeProvider";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
@@ -35,17 +36,19 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <TooltipProvider>
-        <Layout>
-          <AnimatedRoutes />
-        </Layout>
-        <Toaster />
-        <Sonner />
-      </TooltipProvider>
-    </BrowserRouter>
-  </QueryClientProvider>
+  <ThemeProvider defaultTheme="system">
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <TooltipProvider>
+          <Layout>
+            <AnimatedRoutes />
+          </Layout>
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;

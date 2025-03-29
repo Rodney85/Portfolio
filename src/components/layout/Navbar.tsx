@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '../theme/ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,10 +65,12 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            <ThemeToggle />
           </nav>
 
           {/* Contact Button (Desktop) */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
             <Link to="/contact">
               <Button className="bg-orange-500 hover:bg-orange-600">
                 Let's Talk
@@ -76,14 +79,17 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <Button 
-            variant="ghost" 
-            className="md:hidden p-2" 
-            onClick={toggleMenu}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </Button>
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
+            <Button 
+              variant="ghost" 
+              className="p-2" 
+              onClick={toggleMenu}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </Button>
+          </div>
         </div>
       </div>
 
