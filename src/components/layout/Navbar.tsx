@@ -70,7 +70,6 @@ const Navbar = () => {
 
           {/* Contact Button (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
-            <ThemeToggle />
             <Link to="/contact">
               <Button className="bg-orange-500 hover:bg-orange-600">
                 Let's Talk

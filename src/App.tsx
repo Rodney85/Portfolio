@@ -36,7 +36,7 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => (
-  <ThemeProvider defaultTheme="system">
+  <ThemeProvider defaultTheme="light">
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <TooltipProvider>
