@@ -187,49 +187,33 @@ const Home = () => {
                   </motion.div>
                 </div>
                 
-                {/* Client character animation */}
-                <div className="absolute -bottom-10 -right-10 w-28 h-28 md:w-36 md:h-36">
+                {/* Main profile character - replacing placeholder image */}
+                <div className="relative h-72 w-72 md:h-96 md:w-96 mx-auto">
                   <motion.div
                     animate={{ 
-                      y: [0, -8, 0],
-                      rotate: [0, -2, 0, 2, 0]
+                      y: [0, -15, 0],
+                      rotate: [0, 3, 0, -3, 0]
                     }}
                     transition={{ 
                       repeat: Infinity, 
-                      duration: 4,
-                      ease: "easeInOut",
-                      delay: 0.5
+                      duration: 6,
+                      ease: "easeInOut"
                     }}
+                    className="h-full w-full"
                   >
                     <img 
                       src="/client-character.svg" 
-                      alt="Client" 
-                      className="w-full h-full"
+                      alt="Rodney Mutwiri" 
+                      className="h-full w-full object-contain"
                       onError={(e) => {
                         // Fallback if SVG not available
-                        e.currentTarget.src = "https://placehold.co/150x150/3b82f6/FFFFFF.png?text=👩‍💼";
+                        e.currentTarget.src = "https://placehold.co/400x400/3b82f6/FFFFFF.png?text=Rodney+Mutwiri";
                       }}
                     />
                   </motion.div>
-                </div>
-                
-                {/* Main profile image */}
-                <div className="relative rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
-                  <motion.img 
-                    src="https://placehold.co/600x600/ffffff/000000.png?text=Rodney+Mutwiri" 
-                    alt="Rodney Mutwiri" 
-                    className="w-full max-w-md mx-auto rounded-full object-cover z-10 relative"
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ 
-                      type: "spring",
-                      stiffness: 100,
-                      duration: 0.8
-                    }}
-                  />
                   
                   {/* Subtle pulse animation behind image */}
-                  <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 pulse-slow"></div>
+                  <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 pulse-slow -z-10"></div>
                 </div>
               </div>
             </motion.div>
