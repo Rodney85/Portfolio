@@ -14,9 +14,19 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
+
+// ScrollToTop component moved inside Router context
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
 
 // AnimatePresence wrapper component to access location
 const AnimatedRoutes = () => {
@@ -40,9 +50,9 @@ const App = () => (
   <ThemeProvider defaultTheme="light">
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ScrollToTop />
         <TooltipProvider>
           <Layout>
+            <ScrollToTop />
             <AnimatedRoutes />
           </Layout>
           <Toaster />
