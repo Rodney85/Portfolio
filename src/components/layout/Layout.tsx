@@ -5,12 +5,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { Outlet, useLocation } from 'react-router-dom';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const Layout = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
@@ -20,9 +20,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {children}
+        <Outlet />
       </motion.main>
-      <Footer />
+      {isHomePage && <Footer />}
     </div>
   );
 };
