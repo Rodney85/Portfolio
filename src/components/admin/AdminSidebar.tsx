@@ -7,10 +7,19 @@ import {
   MessageSquare, 
   Users, 
   MessageCircle,
-  BookOpen
+  BookOpen,
+  X
 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-const AdminSidebar = () => {
+interface AdminSidebarProps {
+  onClose?: () => void;
+}
+
+const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
+  const isMobile = useIsMobile();
+  
   const navItems = [
     { 
       name: 'Dashboard', 
@@ -45,7 +54,15 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <aside className="bg-background/50 rounded-lg border p-4">
+    <aside className="bg-background/50 rounded-lg border p-4 h-full flex flex-col">
+      {isMobile && onClose && (
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium">Menu</h3>
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
       <nav className="space-y-2">
         {navItems.map((item) => (
           <NavLink
@@ -59,6 +76,7 @@ const AdminSidebar = () => {
               }`
             }
             end={item.path === '/admin'}
+            onClick={isMobile && onClose ? onClose : undefined}
           >
             {item.icon}
             <span>{item.name}</span>
