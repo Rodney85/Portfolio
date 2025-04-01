@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Users, Clock, Code, Smartphone, Layout as LayoutIcon } from 'lucide-react';
@@ -7,29 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import SectionHeading from '@/components/ui/section-heading';
 import ProjectCard from '@/components/projects/ProjectCard';
 import { projects } from '@/data/projects';
-import Lottie from 'lottie-react';
+import LottieAnimation from '@/components/ui/lottie-animation';
 
 const Home = () => {
-  // Animation data fetch
-  const [animationData, setAnimationData] = React.useState(null);
-  
-  useEffect(() => {
-    // Fetch the Lottie animation data
-    fetch('https://app.lottiefiles.com/share/721868a3-0970-489c-bb2a-0964c8921f96')
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Network response was not ok');
-      })
-      .then(data => {
-        setAnimationData(data);
-      })
-      .catch(error => {
-        console.error('Error loading Lottie animation:', error);
-      });
-  }, []);
-
   // Show only featured projects (first 3)
   const featuredProjects = projects.slice(0, 3);
 
@@ -208,7 +188,7 @@ const Home = () => {
                   </motion.div>
                 </div>
                 
-                {/* Main profile character - replacing with Lottie animation */}
+                {/* Main profile character - using DotLottie animation */}
                 <div className="relative h-72 w-72 md:h-96 md:w-96 mx-auto">
                   <motion.div
                     animate={{ 
@@ -222,24 +202,13 @@ const Home = () => {
                     }}
                     className="h-full w-full"
                   >
-                    {animationData ? (
-                      <Lottie 
-                        animationData={animationData} 
-                        loop={true}
-                        autoplay={true}
-                        className="h-full w-full object-contain"
-                      />
-                    ) : (
-                      <img 
-                        src="/client-character.svg" 
-                        alt="Rodney Mutwiri" 
-                        className="h-full w-full object-contain"
-                        onError={(e) => {
-                          // Fallback if SVG not available
-                          e.currentTarget.src = "https://placehold.co/400x400/3b82f6/FFFFFF.png?text=Rodney+Mutwiri";
-                        }}
-                      />
-                    )}
+                    <LottieAnimation
+                      src="https://lottie.host/580a4395-b55d-4d89-aa93-7ce4126015cb/Fpxn7zdf88.lottie"
+                      loop={true}
+                      autoplay={true}
+                      className="h-full w-full object-contain"
+                      isDotLottie={true}
+                    />
                   </motion.div>
                   
                   {/* Subtle pulse animation behind image */}
