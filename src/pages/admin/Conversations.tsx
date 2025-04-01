@@ -21,51 +21,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar } from '@/components/ui/avatar';
 
-// Mock AI conversations data
-const mockConversations = [
-  {
-    id: '1',
-    user: 'visitor123',
-    topic: 'Portfolio Inquiry',
-    messages: [
-      { role: 'user', content: 'Hi, can you tell me about your web development services?', timestamp: '2023-06-15T14:30:00Z' },
-      { role: 'ai', content: 'Hello! I offer a range of web development services including front-end development with React, back-end development with Node.js, and full-stack applications. Would you like to know more about a specific area?', timestamp: '2023-06-15T14:30:10Z' },
-      { role: 'user', content: 'What are your rates for a small business website?', timestamp: '2023-06-15T14:31:00Z' },
-      { role: 'ai', content: 'For small business websites, my rates typically start at $2,000 for a basic site with 5-7 pages. The exact cost depends on your specific needs, desired features, and timeline. Would you like to discuss your project requirements in more detail?', timestamp: '2023-06-15T14:31:15Z' },
-    ],
-    createdAt: '2023-06-15T14:30:00Z',
-    lastUpdated: '2023-06-15T14:31:15Z'
-  },
-  {
-    id: '2',
-    user: 'prospect456',
-    topic: 'Project Collaboration',
-    messages: [
-      { role: 'user', content: 'I need help with a React project. Are you available?', timestamp: '2023-06-14T10:15:00Z' },
-      { role: 'ai', content: 'Yes, I am currently taking on new React projects. Could you share more details about what you\'re looking to build?', timestamp: '2023-06-14T10:15:12Z' },
-      { role: 'user', content: 'We need to build a dashboard for our SaaS product.', timestamp: '2023-06-14T10:16:00Z' },
-      { role: 'ai', content: 'That sounds interesting! For a SaaS dashboard, I would typically use React with a state management solution like Redux or Context API, along with a charting library like Recharts or Chart.js. What kind of metrics and features would your dashboard need to display?', timestamp: '2023-06-14T10:16:22Z' },
-    ],
-    createdAt: '2023-06-14T10:15:00Z',
-    lastUpdated: '2023-06-14T10:16:22Z'
-  },
-  {
-    id: '3',
-    user: 'client789',
-    topic: 'Website Maintenance',
-    messages: [
-      { role: 'user', content: 'Our website is loading slowly. Can you help optimize it?', timestamp: '2023-06-13T09:45:00Z' },
-      { role: 'ai', content: 'I\'d be happy to help optimize your website. Slow loading times can be caused by several factors including large image files, unoptimized code, or server issues. Could you share your website URL so I can take a look?', timestamp: '2023-06-13T09:45:18Z' },
-      { role: 'user', content: 'It\'s www.example.com', timestamp: '2023-06-13T09:46:00Z' },
-      { role: 'ai', content: 'Thank you. I\'ll analyze your website and provide some optimization recommendations. This typically takes about 24-48 hours for a thorough analysis. I\'ll reach out once I have some specific suggestions for improving your site speed.', timestamp: '2023-06-13T09:46:15Z' },
-    ],
-    createdAt: '2023-06-13T09:45:00Z',
-    lastUpdated: '2023-06-13T09:46:15Z'
-  }
-];
-
 interface Message {
-  role: 'user' | 'ai';
+  role: "user" | "ai"; // Explicitly define allowed values
   content: string;
   timestamp: string;
 }
@@ -78,6 +35,49 @@ interface Conversation {
   createdAt: string;
   lastUpdated: string;
 }
+
+// Mock AI conversations data with properly typed roles
+const mockConversations: Conversation[] = [
+  {
+    id: '1',
+    user: 'visitor123',
+    topic: 'Portfolio Inquiry',
+    messages: [
+      { role: "user", content: 'Hi, can you tell me about your web development services?', timestamp: '2023-06-15T14:30:00Z' },
+      { role: "ai", content: 'Hello! I offer a range of web development services including front-end development with React, back-end development with Node.js, and full-stack applications. Would you like to know more about a specific area?', timestamp: '2023-06-15T14:30:10Z' },
+      { role: "user", content: 'What are your rates for a small business website?', timestamp: '2023-06-15T14:31:00Z' },
+      { role: "ai", content: 'For small business websites, my rates typically start at $2,000 for a basic site with 5-7 pages. The exact cost depends on your specific needs, desired features, and timeline. Would you like to discuss your project requirements in more detail?', timestamp: '2023-06-15T14:31:15Z' },
+    ],
+    createdAt: '2023-06-15T14:30:00Z',
+    lastUpdated: '2023-06-15T14:31:15Z'
+  },
+  {
+    id: '2',
+    user: 'prospect456',
+    topic: 'Project Collaboration',
+    messages: [
+      { role: "user", content: 'I need help with a React project. Are you available?', timestamp: '2023-06-14T10:15:00Z' },
+      { role: "ai", content: 'Yes, I am currently taking on new React projects. Could you share more details about what you\'re looking to build?', timestamp: '2023-06-14T10:15:12Z' },
+      { role: "user", content: 'We need to build a dashboard for our SaaS product.', timestamp: '2023-06-14T10:16:00Z' },
+      { role: "ai", content: 'That sounds interesting! For a SaaS dashboard, I would typically use React with a state management solution like Redux or Context API, along with a charting library like Recharts or Chart.js. What kind of metrics and features would your dashboard need to display?', timestamp: '2023-06-14T10:16:22Z' },
+    ],
+    createdAt: '2023-06-14T10:15:00Z',
+    lastUpdated: '2023-06-14T10:16:22Z'
+  },
+  {
+    id: '3',
+    user: 'client789',
+    topic: 'Website Maintenance',
+    messages: [
+      { role: "user", content: 'Our website is loading slowly. Can you help optimize it?', timestamp: '2023-06-13T09:45:00Z' },
+      { role: "ai", content: 'I\'d be happy to help optimize your website. Slow loading times can be caused by several factors including large image files, unoptimized code, or server issues. Could you share your website URL so I can take a look?', timestamp: '2023-06-13T09:45:18Z' },
+      { role: "user", content: 'It\'s www.example.com', timestamp: '2023-06-13T09:46:00Z' },
+      { role: "ai", content: 'Thank you. I\'ll analyze your website and provide some optimization recommendations. This typically takes about 24-48 hours for a thorough analysis. I\'ll reach out once I have some specific suggestions for improving your site speed.', timestamp: '2023-06-13T09:46:15Z' },
+    ],
+    createdAt: '2023-06-13T09:45:00Z',
+    lastUpdated: '2023-06-13T09:46:15Z'
+  }
+];
 
 const AdminConversations = () => {
   const { toast } = useToast();

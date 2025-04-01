@@ -14,7 +14,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { projects as initialProjects, ProjectProps } from '@/data/projects';
+import { projects as initialProjects } from '@/data/projects';
+import { ProjectProps } from '@/components/projects/ProjectCard';
 import {
   Table,
   TableBody,
