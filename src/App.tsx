@@ -16,6 +16,15 @@ import ProjectDetail from "./pages/ProjectDetail";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
+// Admin imports
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProjects from "./pages/admin/Projects";
+import AdminMessages from "./pages/admin/Messages";
+import AdminContacts from "./pages/admin/Contacts";
+import AdminConversations from "./pages/admin/Conversations";
+import AdminJournal from "./pages/admin/Journal";
+
 const queryClient = new QueryClient();
 
 // ScrollToTop component moved inside Router context
@@ -36,11 +45,24 @@ const AnimatedRoutes = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
         <Route path="/contact" element={<Contact />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="projects" element={<AdminProjects />} />
+          <Route path="messages" element={<AdminMessages />} />
+          <Route path="contacts" element={<AdminContacts />} />
+          <Route path="conversations" element={<AdminConversations />} />
+          <Route path="journal" element={<AdminJournal />} />
+        </Route>
+        
+        {/* 404 Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
