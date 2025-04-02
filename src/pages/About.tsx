@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, ArrowRight, BrainCircuit, Rocket, Target, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SectionHeading from '@/components/ui/section-heading';
+import LottieAnimation from '@/components/ui/lottie-animation';
 
 const About = () => {
   const benefits = [
@@ -76,10 +77,12 @@ const About = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="rounded-lg overflow-hidden border border-border/50 shadow-lg">
-                <img 
-                  src="https://placehold.co/600x400/3b82f6/FFFFFF/png?text=Our+Approach" 
-                  alt="Team at work" 
+                <LottieAnimation
+                  src="https://lottie.host/8de5ae5a-f96e-4fb3-b0d1-4fabcc55649f/q37qoi4VwT.lottie"
                   className="w-full h-auto"
+                  loop={true}
+                  autoplay={true}
+                  isDotLottie={true}
                 />
               </div>
             </motion.div>
@@ -131,10 +134,12 @@ const About = () => {
               viewport={{ once: true }}
             >
               <div className="rounded-lg overflow-hidden border border-border/50 shadow-lg">
-                <img 
-                  src="https://placehold.co/600x400/7c3aed/FFFFFF/png?text=Client+Success" 
-                  alt="Client Success" 
+                <LottieAnimation
+                  src="https://lottie.host/a0c68b87-0ba6-4f32-ae5e-ede860c17539/akWR81t8J9.lottie"
                   className="w-full h-auto"
+                  loop={true}
+                  autoplay={true}
+                  isDotLottie={true}
                 />
               </div>
             </motion.div>

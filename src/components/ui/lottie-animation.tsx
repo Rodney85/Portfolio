@@ -9,6 +9,7 @@ interface LottieAnimationProps {
   loop?: boolean;
   autoplay?: boolean;
   isDotLottie?: boolean;
+  speed?: number;
 }
 
 const LottieAnimation = ({ 
@@ -16,7 +17,8 @@ const LottieAnimation = ({
   className = "", 
   loop = true, 
   autoplay = true,
-  isDotLottie = false
+  isDotLottie = false,
+  speed = 0.5
 }: LottieAnimationProps) => {
   if (isDotLottie) {
     return (
@@ -24,6 +26,7 @@ const LottieAnimation = ({
         src={src} 
         loop={loop}
         autoplay={autoplay}
+        speed={speed}
         className={className}
       />
     );
@@ -35,6 +38,7 @@ const LottieAnimation = ({
       loop={loop}
       autoplay={autoplay}
       className={className}
+      speed={speed}
       rendererSettings={{
         preserveAspectRatio: 'xMidYMid slice'
       }}
