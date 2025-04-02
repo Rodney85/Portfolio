@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SectionHeading from '@/components/ui/section-heading';
 import { useQuery } from '@tanstack/react-query';
+import LottieAnimation from '@/components/ui/lottie-animation';
 
 const Home = () => {
   const stats = [
@@ -126,12 +128,11 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <div className="relative">
-                {/* Main profile character - using DotLottie animation */}
+                {/* Use DotLottie animation instead of static image */}
                 <div className="relative h-72 w-72 md:h-96 md:w-96 mx-auto">
                   <motion.div
                     animate={{ 
                       y: [0, -15, 0],
-                      rotate: [0, 3, 0, -3, 0]
                     }}
                     transition={{ 
                       repeat: Infinity, 
@@ -140,10 +141,12 @@ const Home = () => {
                     }}
                     className="h-full w-full"
                   >
-                    <img 
-                      src="/lovable-uploads/72b0a354-6329-4a43-81c7-c72a80392d64.png" 
-                      alt="Profile Character"
+                    <LottieAnimation 
+                      src="https://lottie.host/580a4395-b55d-4d89-aa93-7ce4126015cb/Fpxn7zdf88.lottie" 
                       className="h-full w-full object-contain"
+                      loop={true}
+                      autoplay={true}
+                      isDotLottie={true}
                     />
                   </motion.div>
                   
