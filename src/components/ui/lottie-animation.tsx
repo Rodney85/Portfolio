@@ -38,7 +38,8 @@ const LottieAnimation = ({
       loop={loop}
       autoplay={autoplay}
       className={className}
-      speed={speed}
+      // The lottie-react library uses options.animationSpeed for speed control
+      options={{ animationSpeed: speed }}
       rendererSettings={{
         preserveAspectRatio: 'xMidYMid slice'
       }}
