@@ -6,7 +6,8 @@ import {
   Briefcase, 
   MessageSquare, 
   Users, 
-  Book
+  Book,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -22,27 +23,27 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
     { 
       name: 'Dashboard', 
       path: '/admin', 
-      icon: <LayoutDashboard className="h-5 w-5 mr-2" /> 
+      icon: <LayoutDashboard className="h-5 w-5 mr-3" /> 
     },
     { 
       name: 'Projects', 
       path: '/admin/projects', 
-      icon: <Briefcase className="h-5 w-5 mr-2" /> 
+      icon: <Briefcase className="h-5 w-5 mr-3" /> 
     },
     { 
       name: 'Messages', 
       path: '/admin/messages', 
-      icon: <MessageSquare className="h-5 w-5 mr-2" /> 
+      icon: <MessageSquare className="h-5 w-5 mr-3" /> 
     },
     { 
       name: 'Contacts', 
       path: '/admin/contacts', 
-      icon: <Users className="h-5 w-5 mr-2" /> 
+      icon: <Users className="h-5 w-5 mr-3" /> 
     },
     { 
       name: 'Journal', 
       path: '/admin/journal', 
-      icon: <Book className="h-5 w-5 mr-2" /> 
+      icon: <Book className="h-5 w-5 mr-3" /> 
     },
   ];
 
@@ -62,10 +63,10 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
             key={item.path}
             to={item.path}
             className={({ isActive }) => 
-              `flex items-center px-3 py-2 rounded-md transition-colors ${
+              `flex items-center px-4 py-2.5 rounded-md transition-colors ${
                 isActive 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'hover:bg-muted'
+                  ? 'bg-primary text-primary-foreground font-medium' 
+                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
               }`
             }
             end={item.path === '/admin'}
