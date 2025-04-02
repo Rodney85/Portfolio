@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { projects } from '@/data/projects';
-import { Briefcase, MessageSquare, Users, MessageCircle, BookOpen } from 'lucide-react';
+import { Briefcase, MessageSquare, Users, Book } from 'lucide-react';
 
 const AdminDashboard = () => {
   // Mock data counts (would come from a database in a real application)
@@ -10,7 +10,6 @@ const AdminDashboard = () => {
     projects: projects.length,
     messages: 8,
     contacts: 12,
-    conversations: 5,
     journalEntries: 7
   };
 
@@ -34,15 +33,9 @@ const AdminDashboard = () => {
       link: "/admin/contacts"
     },
     {
-      title: "AI Conversations",
-      value: counts.conversations,
-      icon: <MessageCircle className="h-8 w-8 text-primary" />,
-      link: "/admin/conversations"
-    },
-    {
       title: "Journal Entries",
       value: counts.journalEntries,
-      icon: <BookOpen className="h-8 w-8 text-primary" />,
+      icon: <Book className="h-8 w-8 text-primary" />,
       link: "/admin/journal"
     }
   ];
@@ -78,7 +71,7 @@ const AdminDashboard = () => {
           <CardContent className="p-6">
             <p className="text-muted-foreground">
               Welcome to your portfolio admin dashboard. This is where you can manage all your
-              projects, messages, contacts, AI assistant conversations, and journal entries.
+              projects, messages, contacts, and journal entries.
             </p>
             <p className="text-muted-foreground mt-2">
               Use the navigation on the left to access different sections.

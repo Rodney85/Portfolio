@@ -6,9 +6,7 @@ import {
   Briefcase, 
   MessageSquare, 
   Users, 
-  MessageCircle,
-  BookOpen,
-  X
+  Book
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -42,14 +40,9 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
       icon: <Users className="h-5 w-5 mr-2" /> 
     },
     { 
-      name: 'Conversations', 
-      path: '/admin/conversations', 
-      icon: <MessageCircle className="h-5 w-5 mr-2" /> 
-    },
-    { 
       name: 'Journal', 
       path: '/admin/journal', 
-      icon: <BookOpen className="h-5 w-5 mr-2" /> 
+      icon: <Book className="h-5 w-5 mr-2" /> 
     },
   ];
 
