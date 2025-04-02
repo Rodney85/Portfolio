@@ -27,9 +27,17 @@ export function ThemeProvider({
   defaultTheme = "light",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) || defaultTheme
-  )
+  // Fix: Use a string value as the initial state instead of trying to access localStorage directly
+  const [theme, setTheme] = useState<Theme>(defaultTheme)
+  
+  // Use useEffect to safely access localStorage after component mount
+  useEffect(() => {
+    // Get theme from localStorage or use default
+    const storedTheme = localStorage.getItem("theme") as Theme
+    if (storedTheme) {
+      setTheme(storedTheme)
+    }
+  }, [])
 
   useEffect(() => {
     const root = window.document.documentElement
