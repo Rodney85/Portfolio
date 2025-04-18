@@ -5,12 +5,12 @@ import { projects } from '@/data/projects';
 import { Briefcase, MessageSquare, Users, Book } from 'lucide-react';
 
 const AdminDashboard = () => {
-  // Mock data counts (would come from a database in a real application)
+  // Get actual counts from the state in other admin components
   const counts = {
-    projects: projects.length,
-    messages: 8,
-    contacts: 12,
-    journalEntries: 7
+    projects: projects.length || 0,  // From projects data
+    messages: 0,  // No messages by default
+    contacts: 0,  // No contacts by default
+    journalEntries: 0  // No journal entries by default
   };
 
   const statsCards = [
@@ -84,3 +84,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
