@@ -9,7 +9,7 @@ import {
   TableRow
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -22,33 +22,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-// Mock contacts data
-const mockContacts = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    company: 'Acme Inc',
-    phone: '(555) 123-4567',
-    createdAt: '2023-06-01T10:30:00Z'
-  },
-  {
-    id: '2',
-    name: 'Sarah Smith',
-    email: 'sarah@example.com',
-    company: 'Tech Solutions',
-    phone: '(555) 987-6543',
-    createdAt: '2023-05-28T14:15:00Z'
-  },
-  {
-    id: '3',
-    name: 'Michael Johnson',
-    email: 'michael@example.com',
-    company: 'Global Designs',
-    phone: '(555) 456-7890',
-    createdAt: '2023-05-25T09:45:00Z'
-  },
-];
+// Contact interface was already defined below, so we don't need mock data
 
 interface ContactType {
   id: string;
@@ -61,7 +35,7 @@ interface ContactType {
 
 const AdminContacts = () => {
   const { toast } = useToast();
-  const [contacts, setContacts] = useState<ContactType[]>(mockContacts);
+  const [contacts, setContacts] = useState<ContactType[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentContact, setCurrentContact] = useState<ContactType>({
@@ -208,48 +182,62 @@ const AdminContacts = () => {
         </Dialog>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Added On</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {contacts.map((contact) => (
-            <TableRow key={contact.id}>
-              <TableCell className="font-medium">{contact.name}</TableCell>
-              <TableCell>{contact.email}</TableCell>
-              <TableCell>{contact.company}</TableCell>
-              <TableCell>{contact.phone}</TableCell>
-              <TableCell>{formatDate(contact.createdAt)}</TableCell>
-              <TableCell>
-                <div className="flex space-x-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    onClick={() => handleOpenEdit(contact)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="text-destructive" 
-                    onClick={() => handleDelete(contact.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
+      {contacts.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Company</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Added On</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {contacts.map((contact) => (
+              <TableRow key={contact.id}>
+                <TableCell className="font-medium">{contact.name}</TableCell>
+                <TableCell>{contact.email}</TableCell>
+                <TableCell>{contact.company}</TableCell>
+                <TableCell>{contact.phone}</TableCell>
+                <TableCell>{formatDate(contact.createdAt)}</TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handleOpenEdit(contact)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="text-destructive" 
+                      onClick={() => handleDelete(contact.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className="text-center py-10 border rounded-lg bg-background/50">
+          <div className="flex justify-center mb-4">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+          <h3 className="text-lg font-medium mb-2">No contacts yet</h3>
+          <p className="text-muted-foreground mb-4">
+            Add your first contact using the 'Add Contact' button above.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

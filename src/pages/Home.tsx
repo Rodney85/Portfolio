@@ -1,12 +1,14 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Smartphone, Code, LayoutGrid as LayoutIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SectionHeading from '@/components/ui/section-heading';
-import { useQuery } from '@tanstack/react-query';
+import ProjectCard from '@/components/projects/ProjectCard';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 import LottieAnimation from '@/components/ui/lottie-animation';
 
 const Home = () => {
@@ -15,6 +17,35 @@ const Home = () => {
     { number: "30+", label: "Clients" },
     { number: "5+", label: "Years" },
   ];
+  
+  // Fetch projects from Convex
+  const convexProjects = useQuery(api.projects.getAll as any);
+  const [recentProjects, setRecentProjects] = useState<any[]>([]);
+  
+  // Process projects when they arrive from Convex
+  useEffect(() => {
+    if (convexProjects && convexProjects.length > 0) {
+      // Convert Convex projects to our ProjectProps format
+      const projects = convexProjects.map(project => ({
+        id: project._id,
+        title: project.title,
+        description: project.description,
+        imageUrl: project.imageUrl || '',
+        tags: project.tags,
+        githubUrl: project.githubUrl || '',
+        liveUrl: project.liveUrl || ''
+      }));
+      
+      // Sort by most recent and take up to 3
+      const sorted = [...projects].sort((a, b) => {
+        // Use the ID for sorting as a proxy for creation time
+        // Convex IDs are time-based
+        return b.id.localeCompare(a.id);
+      }).slice(0, 3);
+      
+      setRecentProjects(sorted);
+    }
+  }, [convexProjects]);
 
   // Empty states for no projects and articles
   const EmptyProjects = () => (
@@ -224,7 +255,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Projects Section - Now with empty state */}
+      {/* Featured Projects Section */}
       <section className="py-16 bg-secondary/30">
         <div className="container-custom">
           <SectionHeading 
@@ -232,7 +263,29 @@ const Home = () => {
             subtitle="Check out some of my recent work"
           />
           
-          <EmptyProjects />
+          {recentProjects.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                {recentProjects.map((project, index) => (
+                  <ProjectCard key={project.id} project={project} index={index} />
+                ))}
+              </div>
+              <div className="flex justify-center mt-8">
+                <Link to="/projects">
+                  <Button variant="outline" size="lg" className="flex items-center gap-2">
+                    View All Projects <ArrowRight size={16} />
+                  </Button>
+                </Link>
+              </div>
+            </>
+          ) : convexProjects === undefined ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading projects...</p>
+            </div>
+          ) : (
+            <EmptyProjects />
+          )}
         </div>
       </section>
 

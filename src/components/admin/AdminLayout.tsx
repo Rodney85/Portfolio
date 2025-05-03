@@ -7,7 +7,6 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ThemeToggle } from '../theme/ThemeToggle';
-import { Link } from 'react-router-dom';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,44 +17,44 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Admin Header */}
-      <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-40">
-        <div className="container-custom flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-bold text-xl md:text-2xl bg-gradient-to-r from-tech-purple to-orange-500 bg-clip-text text-transparent">
-              Rodney.dev
-            </span>
-          </Link>
-          
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* Mobile sidebar backdrop */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" 
+          onClick={toggleSidebar}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div 
+        className={`${isMobile 
+          ? 'fixed inset-y-0 left-0 z-50 w-64 shadow-lg transform transition-transform duration-200 ease-in-out ' + 
+            (sidebarOpen ? 'translate-x-0' : '-translate-x-full')
+          : 'w-64 border-r'}`}
+      >
+        <AdminSidebar onClose={() => setSidebarOpen(false)} />
+      </div>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Minimal header */}
+        <header className="h-16 border-b bg-background/95 backdrop-blur sticky top-0 z-10 flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             {isMobile && (
-              <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-                {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <Button variant="ghost" size="icon" onClick={toggleSidebar} className="mr-2">
+                <Menu className="h-5 w-5" />
               </Button>
             )}
+            <h1 className="text-xl font-bold">Portfolio Admin</h1>
           </div>
-        </div>
-      </header>
-      
-      <div className="container-custom py-4 md:py-6">
-        <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold">Portfolio Admin</h1>
-        </div>
-        <Separator className="mb-4 md:mb-6" />
+          <ThemeToggle />
+        </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
-          <div className={`${isMobile ? 'fixed inset-0 z-50 bg-background/80 backdrop-blur-sm transition-opacity ' + (sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none') : ''}`}>
-            <div className={`${isMobile ? 'fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs bg-background p-4 shadow-lg transition-transform ' + (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}`}>
-              <AdminSidebar onClose={() => setSidebarOpen(false)} />
-            </div>
-          </div>
-          {!isMobile && <AdminSidebar />}
-          <main className="md:col-span-3 bg-background/50 rounded-lg border p-4 md:p-6 overflow-x-auto">
-            <Outlet />
-          </main>
-        </div>
+        {/* Main content area */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

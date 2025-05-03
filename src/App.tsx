@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from "./components/theme/ThemeProvider";
 
@@ -24,6 +23,11 @@ import AdminMessages from "./pages/admin/Messages";
 import AdminContacts from "./pages/admin/Contacts";
 import AdminConversations from "./pages/admin/Conversations";
 import AdminJournal from "./pages/admin/Journal";
+import AdminSettings from "./pages/admin/Settings";
+
+// Auth imports
+import AuthGuard from "./components/auth/AuthGuard";
+import LoginModal from "./components/auth/LoginModal";
 
 const queryClient = new QueryClient();
 
@@ -50,18 +54,21 @@ const AnimatedRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/contact" element={<Contact />} />
         </Route>
         
-        {/* Admin Routes - No public layout */}
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Auth Routes - Removed since we're using a modal now */}
+        
+        {/* Admin Routes - Protected with AuthGuard */}
+        <Route path="/admin" element={<AuthGuard><AdminLayout /></AuthGuard>}>
           <Route index element={<AdminDashboard />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="messages" element={<AdminMessages />} />
           <Route path="contacts" element={<AdminContacts />} />
           <Route path="conversations" element={<AdminConversations />} />
           <Route path="journal" element={<AdminJournal />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
         
         {/* 404 Route */}
@@ -72,16 +79,14 @@ const AnimatedRoutes = () => {
 };
 
 const App = () => (
-  <ThemeProvider defaultTheme="light">
+  <ThemeProvider defaultTheme="dark">
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <TooltipProvider>
-          <ScrollToTop />
-          <AnimatedRoutes />
-          <Toaster />
-          <Sonner />
-        </TooltipProvider>
-      </BrowserRouter>
+      <TooltipProvider>
+        <ScrollToTop />
+        <AnimatedRoutes />
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
     </QueryClientProvider>
   </ThemeProvider>
 );

@@ -1,23 +1,71 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Github, ExternalLink } from 'lucide-react';
-import { getProjectById } from '@/data/projects';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const project = id ? getProjectById(id) : undefined;
-
+  const [project, setProject] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Fetch all projects from Convex
+  const convexProjects = useQuery(api.projects.getAll as any);
+  
   useEffect(() => {
-    if (!project) {
-      navigate('/projects', { replace: true });
+    if (convexProjects === undefined) {
+      // Still loading
+      setIsLoading(true);
+      return;
     }
-  }, [project, navigate]);
+    
+    if (convexProjects && id) {
+      // Find the project with matching ID
+      const foundProject = convexProjects.find(p => p._id === id);
+      
+      if (foundProject) {
+        // Format project data
+        setProject({
+          id: foundProject._id,
+          title: foundProject.title,
+          description: foundProject.description,
+          imageUrl: foundProject.imageUrl || '',
+          additionalImages: foundProject.additionalImages || [],
+          tags: foundProject.tags,
+          githubUrl: foundProject.githubUrl || '',
+          liveUrl: foundProject.liveUrl || '',
+          detailedDescription: foundProject.detailedDescription || '',
+          technologies: foundProject.technologies || '',
+          challenges: foundProject.challenges || '',
+          outcomes: foundProject.outcomes || '',
+          duration: foundProject.duration || '',
+          year: foundProject.year || '',
+          role: foundProject.role || '',
+          teamSize: foundProject.teamSize || ''
+        });
+      } else {
+        // Project not found
+        navigate('/projects', { replace: true });
+      }
+    }
+    
+    setIsLoading(false);
+  }, [convexProjects, id, navigate]);
 
+  if (isLoading) {
+    return (
+      <div className="py-20 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
+        <p className="text-muted-foreground">Loading project details...</p>
+      </div>
+    );
+  }
+  
   if (!project) return null;
 
   return (
@@ -66,20 +114,34 @@ const ProjectDetail = () => {
               >
                 <p className="paragraph">{project.description}</p>
                 
-                {/* This is where you'd put more detailed project information */}
-                <h3 className="text-xl font-bold mt-6 mb-3">Project Details</h3>
-                <p className="paragraph">
-                  This project was developed to solve specific business challenges and provide exceptional user experiences.
-                  The implementation includes modern technologies and best practices to ensure scalability and performance.
-                </p>
+                {/* Display actual project details */}
+                {project.detailedDescription && (
+                  <>
+                    <h3 className="text-xl font-bold mt-6 mb-3">Project Details</h3>
+                    <p className="paragraph">{project.detailedDescription}</p>
+                  </>
+                )}
                 
-                <h3 className="text-xl font-bold mt-6 mb-3">Key Features</h3>
-                <ul className="list-disc pl-5 space-y-2 paragraph">
-                  <li>Feature 1: Lorem ipsum dolor sit amet</li>
-                  <li>Feature 2: Consectetur adipiscing elit</li>
-                  <li>Feature 3: Sed do eiusmod tempor incididunt</li>
-                  <li>Feature 4: Ut labore et dolore magna aliqua</li>
-                </ul>
+                {project.technologies && (
+                  <>
+                    <h3 className="text-xl font-bold mt-6 mb-3">Technologies</h3>
+                    <p className="paragraph">{project.technologies}</p>
+                  </>
+                )}
+                
+                {project.challenges && (
+                  <>
+                    <h3 className="text-xl font-bold mt-6 mb-3">Challenges</h3>
+                    <p className="paragraph">{project.challenges}</p>
+                  </>
+                )}
+                
+                {project.outcomes && (
+                  <>
+                    <h3 className="text-xl font-bold mt-6 mb-3">Outcomes</h3>
+                    <p className="paragraph">{project.outcomes}</p>
+                  </>
+                )}
               </motion.div>
               
               <motion.div 
@@ -98,12 +160,50 @@ const ProjectDetail = () => {
                 
                 {project.liveUrl && (
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="flex items-center">
-                      <ExternalLink className="mr-2 h-4 w-4" /> Live Preview
+                    <Button variant="default" className="flex items-center bg-primary hover:bg-primary/90">
+                      <ExternalLink className="mr-2 h-4 w-4" /> Live URL
                     </Button>
                   </a>
                 )}
               </motion.div>
+
+              {/* Display project metadata */}
+              {(project.duration || project.year || project.role || project.teamSize) && (
+                <motion.div 
+                  className="mt-8 grid grid-cols-2 gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  {project.duration && (
+                    <div>
+                      <h4 className="font-medium text-sm text-muted-foreground">Duration</h4>
+                      <p>{project.duration}</p>
+                    </div>
+                  )}
+                  
+                  {project.year && (
+                    <div>
+                      <h4 className="font-medium text-sm text-muted-foreground">Year</h4>
+                      <p>{project.year}</p>
+                    </div>
+                  )}
+                  
+                  {project.role && (
+                    <div>
+                      <h4 className="font-medium text-sm text-muted-foreground">Role</h4>
+                      <p>{project.role}</p>
+                    </div>
+                  )}
+                  
+                  {project.teamSize && (
+                    <div>
+                      <h4 className="font-medium text-sm text-muted-foreground">Team Size</h4>
+                      <p>{project.teamSize}</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
             </div>
             
             <motion.div
@@ -112,38 +212,31 @@ const ProjectDetail = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <div className="sticky top-24">
-                <div className="rounded-lg overflow-hidden border border-border/50 shadow-lg">
-                  <img 
-                    src={project.imageUrl} 
-                    alt={`${project.title} preview`}
-                    className="w-full h-auto"
-                  />
-                </div>
+                {/* Main image */}
+                {project.imageUrl && (
+                  <div className="rounded-lg overflow-hidden border border-border/50 shadow-lg">
+                    <img 
+                      src={project.imageUrl} 
+                      alt={`${project.title} preview`}
+                      className="w-full h-auto"
+                    />
+                  </div>
+                )}
                 
-                {/* More project images could go here */}
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                  <div className="rounded overflow-hidden border border-border/50">
-                    <img 
-                      src={`https://placehold.co/300x200/${project.id === 'ai-workflow-automation' ? '10b981' : project.id === 'saas-landing-page' ? 'f97316' : project.id === 'e-commerce-platform' ? '7c3aed' : '2563eb'}/FFFFFF/png?text=Detail+1`} 
-                      alt="Project detail 1"
-                      className="w-full h-auto"
-                    />
+                {/* Additional images from the database */}
+                {project.additionalImages && project.additionalImages.length > 0 && (
+                  <div className="grid grid-cols-3 gap-4 mt-4">
+                    {project.additionalImages.map((imageUrl, index) => (
+                      <div key={index} className="rounded overflow-hidden border border-border/50 aspect-square">
+                        <img 
+                          src={imageUrl} 
+                          alt={`${project.title} detail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
                   </div>
-                  <div className="rounded overflow-hidden border border-border/50">
-                    <img 
-                      src={`https://placehold.co/300x200/${project.id === 'ai-workflow-automation' ? '10b981' : project.id === 'saas-landing-page' ? 'f97316' : project.id === 'e-commerce-platform' ? '7c3aed' : '2563eb'}/FFFFFF/png?text=Detail+2`} 
-                      alt="Project detail 2"
-                      className="w-full h-auto"
-                    />
-                  </div>
-                  <div className="rounded overflow-hidden border border-border/50">
-                    <img 
-                      src={`https://placehold.co/300x200/${project.id === 'ai-workflow-automation' ? '10b981' : project.id === 'saas-landing-page' ? 'f97316' : project.id === 'e-commerce-platform' ? '7c3aed' : '2563eb'}/FFFFFF/png?text=Detail+3`} 
-                      alt="Project detail 3"
-                      className="w-full h-auto"
-                    />
-                  </div>
-                </div>
+                )}
               </div>
             </motion.div>
           </div>

@@ -3,10 +3,152 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../theme/ThemeToggle';
+import { useAuth } from '@/context/AuthContext';
+import LoginModal from '../auth/LoginModal';
+
+// Admin button using key combination to show
+const AdminButton = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const location = useLocation();
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  
+  // Check if we're on the admin section
+  const isAdminSection = location.pathname.startsWith('/admin');
+  
+  // Setup key combination listener (Alt+A)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Show admin button when Alt+A is pressed
+      if (e.altKey && e.key === 'a') {
+        setShowAdmin(true);
+        // Auto-hide after 5 seconds
+        setTimeout(() => setShowAdmin(false), 5000);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
+  // If we're in the admin section and logged in, don't show any buttons
+  if (isAdminSection && isAuthenticated) return null;
+  
+  // On the main site, don't show anything unless Alt+A is pressed
+  if (!showAdmin && !isAuthenticated) return null;
+  
+  return (
+    <>
+      {isAuthenticated ? (
+        <div className="flex gap-2">
+          <Link to="/admin">
+            <Button variant="outline" size="sm" className="flex items-center gap-1.5">
+              <User size={16} />
+              Admin
+            </Button>
+          </Link>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="flex items-center gap-1.5 text-muted-foreground"
+            onClick={logout}
+          >
+            <LogOut size={16} />
+            Logout
+          </Button>
+        </div>
+      ) : (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1.5"
+          onClick={() => setShowLoginModal(true)}
+        >
+          <User size={16} />
+          Admin Login
+        </Button>
+      )}
+      
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
+    </>
+  );
+};
+
+// Admin login button for mobile view
+const AdminButtonMobile = () => {
+  const { isAuthenticated, logout } = useAuth();
+  const location = useLocation();
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  
+  // Check if we're on the admin section
+  const isAdminSection = location.pathname.startsWith('/admin');
+  
+  // Share the same state as the desktop button
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && e.key === 'a') {
+        setShowAdmin(true);
+        setTimeout(() => setShowAdmin(false), 5000);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  
+  // If we're in the admin section and logged in, don't show any buttons
+  if (isAdminSection && isAuthenticated) return null;
+  
+  // On the main site, don't show anything unless Alt+A is pressed
+  if (!showAdmin && !isAuthenticated) return null;
+  
+  return (
+    <>
+      {isAuthenticated ? (
+        <div className="space-y-2">
+          <Link to="/admin" className="block">
+            <Button variant="outline" size="sm" className="w-full flex items-center justify-center gap-1.5">
+              <User size={16} />
+              Admin Panel
+            </Button>
+          </Link>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="w-full flex items-center justify-center gap-1.5 text-muted-foreground"
+            onClick={logout}
+          >
+            <LogOut size={16} />
+            Logout
+          </Button>
+        </div>
+      ) : (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="w-full flex items-center justify-center gap-1.5"
+          onClick={() => setShowLoginModal(true)}
+        >
+          <User size={16} />
+          Admin Login
+        </Button>
+      )}
+      
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
+    </>
+  );
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,6 +217,7 @@ const Navbar = () => {
                 Let's Talk
               </Button>
             </Link>
+            {/* AdminButton removed from public navigation */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -118,6 +261,7 @@ const Navbar = () => {
                   Let's Talk
                 </Button>
               </Link>
+              {/* AdminButtonMobile removed from public navigation */}
             </nav>
           </motion.div>
         )}

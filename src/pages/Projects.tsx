@@ -5,35 +5,50 @@ import ProjectCard from '@/components/projects/ProjectCard';
 import SectionHeading from '@/components/ui/section-heading';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
-
-// Remove the mock data import
-// import { projects } from '@/data/projects';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 const Projects = () => {
   const [filter, setFilter] = useState<string | null>(null);
-  const [projects, setProjects] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [formattedProjects, setFormattedProjects] = useState<any[]>([]);
   const isMobile = useIsMobile();
-
-  // Fetch projects from API
+  
+  // Fetch projects from Convex
+  const convexProjects = useQuery(api.projects.getAll as any);
+  const isLoading = convexProjects === undefined;
+  
+  // Process projects from Convex when they arrive
   useEffect(() => {
-    // In a real application, you would fetch from an API
-    // For now, we'll just simulate that with an empty array
-    setProjects([]);
-    setIsLoading(false);
-  }, []);
+    if (convexProjects && convexProjects.length > 0) {
+      // Convert Convex projects to our ProjectProps format
+      const projects = convexProjects.map(project => ({
+        id: project._id,
+        title: project.title,
+        description: project.description,
+        imageUrl: project.imageUrl || '',
+        additionalImages: project.additionalImages || [],
+        tags: project.tags,
+        githubUrl: project.githubUrl || '',
+        liveUrl: project.liveUrl || ''
+      }));
+      setFormattedProjects(projects);
+    } else if (convexProjects && convexProjects.length === 0) {
+      // If we have an empty array (not undefined), set projects to empty
+      setFormattedProjects([]);
+    }
+  }, [convexProjects]);
 
   // Get unique tags from all projects
   const allTags = Array.from(
     new Set(
-      projects.flatMap(project => project.tags)
+      formattedProjects.flatMap(project => project.tags)
     )
   ).sort();
 
   // Filter projects based on selected tag
   const filteredProjects = filter 
-    ? projects.filter(project => project.tags.includes(filter))
-    : projects;
+    ? formattedProjects.filter(project => project.tags.includes(filter))
+    : formattedProjects;
 
   return (
     <>
@@ -45,7 +60,7 @@ const Projects = () => {
           />
 
           {/* Filter buttons */}
-          {projects.length > 0 && (
+          {formattedProjects.length > 0 && (
             <motion.div 
               className="flex flex-wrap gap-2 mb-6 md:mb-10 justify-center"
               initial={{ opacity: 0, y: 20 }}
@@ -80,7 +95,7 @@ const Projects = () => {
             <div className="text-center py-20">
               <p className="text-xl text-muted-foreground">Loading projects...</p>
             </div>
-          ) : projects.length === 0 ? (
+          ) : formattedProjects.length === 0 ? (
             <div className="text-center py-20 bg-muted/20 rounded-lg">
               <p className="text-xl text-muted-foreground">No projects available yet.</p>
               <p className="mt-2 text-muted-foreground">Check back soon for updates!</p>

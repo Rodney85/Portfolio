@@ -1,16 +1,20 @@
-
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Briefcase, 
   MessageSquare, 
   Users, 
   Book,
-  X
+  X,
+  LogOut,
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAuth } from '@/context/AuthContext';
 
 interface AdminSidebarProps {
   onClose?: () => void;
@@ -18,65 +22,143 @@ interface AdminSidebarProps {
 
 const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
   const isMobile = useIsMobile();
+  const { logout } = useAuth();
   
-  const navItems = [
+  const handleLogout = () => {
+    logout();
+    // Redirect happens automatically via AuthGuard
+  };
+
+  const mainNavItems = [
     { 
       name: 'Dashboard', 
       path: '/admin', 
-      icon: <LayoutDashboard className="h-5 w-5 mr-3" /> 
+      icon: <LayoutDashboard className="h-5 w-5" /> 
     },
     { 
       name: 'Projects', 
       path: '/admin/projects', 
-      icon: <Briefcase className="h-5 w-5 mr-3" /> 
+      icon: <Briefcase className="h-5 w-5" /> 
     },
     { 
       name: 'Messages', 
       path: '/admin/messages', 
-      icon: <MessageSquare className="h-5 w-5 mr-3" /> 
+      icon: <MessageSquare className="h-5 w-5" /> 
     },
     { 
       name: 'Contacts', 
       path: '/admin/contacts', 
-      icon: <Users className="h-5 w-5 mr-3" /> 
+      icon: <Users className="h-5 w-5" /> 
     },
     { 
       name: 'Journal', 
       path: '/admin/journal', 
-      icon: <Book className="h-5 w-5 mr-3" /> 
+      icon: <Book className="h-5 w-5" /> 
     },
   ];
 
+  const utilityNavItems = [
+    { 
+      name: 'Settings', 
+      path: '/admin/settings', 
+      icon: <Settings className="h-5 w-5" /> 
+    },
+    { 
+      name: 'View Site', 
+      path: '/', 
+      icon: <LogOut className="h-5 w-5" />,
+      external: true
+    },
+  ];
+
+  const NavItem = ({ item, onClick }: { item: any, onClick?: () => void }) => (
+    <NavLink
+      key={item.path}
+      to={item.path}
+      className={({ isActive }) => 
+        `flex items-center px-4 py-2.5 rounded-md transition-colors ${
+          isActive && !item.external
+            ? 'bg-primary text-primary-foreground font-medium' 
+            : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+        }`
+      }
+      end={item.path === '/admin'}
+      onClick={onClick}
+    >
+      <span className="mr-3">{item.icon}</span>
+      <span>{item.name}</span>
+    </NavLink>
+  );
+
   return (
-    <aside className="bg-background/50 rounded-lg border p-4 h-full flex flex-col">
+    <aside className="flex flex-col h-full bg-background">
+      {/* Logo/Brand section */}
+      <div className="p-4 border-b">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="font-bold text-xl bg-gradient-to-r from-tech-purple to-orange-500 bg-clip-text text-transparent">
+            Rodney.dev
+          </span>
+        </Link>
+      </div>
+      
+      {/* Mobile close button */}
       {isMobile && onClose && (
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-medium">Menu</h3>
+        <div className="flex justify-end p-2">
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-5 w-5" />
           </Button>
         </div>
       )}
-      <nav className="space-y-2">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) => 
-              `flex items-center px-4 py-2.5 rounded-md transition-colors ${
-                isActive 
-                  ? 'bg-primary text-primary-foreground font-medium' 
-                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
-              }`
-            }
-            end={item.path === '/admin'}
-            onClick={isMobile && onClose ? onClose : undefined}
+      
+      {/* Scrollable navigation area */}
+      <ScrollArea className="flex-1 py-2">
+        <div className="px-3">
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mx-4 mb-2">Main</div>
+          <nav className="space-y-1 mb-6">
+            {mainNavItems.map((item) => (
+              <NavItem 
+                key={item.path}
+                item={item} 
+                onClick={isMobile && onClose ? onClose : undefined} 
+              />
+            ))}
+          </nav>
+          
+          <Separator className="my-4" />
+          
+          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mx-4 mb-2">Utilities</div>
+          <nav className="space-y-1">
+            {utilityNavItems.map((item) => (
+              <NavItem 
+                key={item.path}
+                item={item} 
+                onClick={isMobile && onClose ? onClose : undefined} 
+              />
+            ))}
+          </nav>
+        </div>
+      </ScrollArea>
+      
+      {/* User section */}
+      <div className="p-4 border-t mt-auto">
+        <div className="mt-auto flex items-center gap-2 py-4 px-3 border-t">
+          <div className="flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <Users size={16} className="text-primary" />
+            </div>
+          </div>
+          <div className="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="font-medium">Admin</span>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors"
+            title="Logout"
           >
-            {item.icon}
-            <span>{item.name}</span>
-          </NavLink>
-        ))}
-      </nav>
+            <LogOut size={18} />
+          </button>
+        </div>
+      </div>
     </aside>
   );
 };

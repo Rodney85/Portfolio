@@ -1,13 +1,12 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { projects } from '@/data/projects';
 import { Briefcase, MessageSquare, Users, Book } from 'lucide-react';
 
 const AdminDashboard = () => {
-  // Get actual counts from the state in other admin components
+  // Set all initial counts to zero - will be populated by real data later
   const counts = {
-    projects: projects.length || 0,  // From projects data
+    projects: 0,  // No projects by default
     messages: 0,  // No messages by default
     contacts: 0,  // No contacts by default
     journalEntries: 0  // No journal entries by default
