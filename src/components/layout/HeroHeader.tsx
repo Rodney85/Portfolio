@@ -24,7 +24,8 @@ export function HeroHeader() {
 
     React.useEffect(() => {
         const unsubscribe = scrollYProgress.on('change', (latest) => {
-            setScrolled(latest > 0.05)
+            // Activate blur effect on any scroll (> 0)
+            setScrolled(latest > 0)
         })
         return () => unsubscribe()
     }, [scrollYProgress])
@@ -37,7 +38,7 @@ export function HeroHeader() {
         <header>
             <nav
                 data-state={menuState && 'active'}
-                className={cn('group fixed z-20 w-full border-b transition-all duration-150', scrolled && 'bg-background/30 backdrop-blur-md')}>
+                className={cn('group fixed z-20 w-full border-b transition-all duration-150', scrolled && 'bg-background/40 backdrop-blur-md')}>
                 <div className="mx-auto max-w-5xl px-4 sm:px-6 transition-all duration-300">
                     <div className="relative flex flex-wrap items-center justify-between gap-4 py-3 lg:gap-0 lg:py-4">
                         <div className="flex w-full items-center justify-between gap-6 md:gap-12 lg:w-auto">
