@@ -25,14 +25,8 @@ const SignIn: React.FC<SignInProps> = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Add debugging output for troubleshooting
-    console.log('Login attempt with:', { 
-      username: username,
-      password: password ? '******' : 'empty', // Don't log actual password
-    });
     
     // Clear any previous errors
     setError('');
@@ -43,21 +37,16 @@ const SignIn: React.FC<SignInProps> = () => {
       return;
     }
     
-    // Attempt to log in
-    const success = login(username, password);
-    
-    console.log('Login result:', { success });
-    
-    if (success) {
-      setError('');
-      navigate('/admin');
-    } else {
-      // If in development mode, show a helpful message about credentials
-      if (import.meta.env.DEV) {
-        console.log('Login hint: If environment variables aren\'t set, try username "admin" with password "admin123"');
-      }
+    try {
+      // Attempt to log in (now async)
+      const success = await login(username, password);
       
-      setError('Invalid username or password');
+      if (success) {
+        navigate('/admin');
+      }
+      // The error state is now managed by the AuthContext
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred');
     }
   };
 

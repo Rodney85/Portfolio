@@ -2,6 +2,14 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  // Admin users table - simple username/password authentication
+  adminUsers: defineTable({
+    username: v.string(),
+    // Store hashed password in production
+    passwordHash: v.string(),
+    lastLogin: v.optional(v.number()),
+    createdAt: v.number(),
+  }).index("by_username", ["username"]),
   // Projects table
   projects: defineTable({
     // Basic fields

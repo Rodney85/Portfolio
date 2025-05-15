@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => boolean;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
+  isLoading: boolean;
+  error: string | null;
 }
 
 // Create a context for authentication
@@ -18,81 +22,74 @@ export const useAuth = () => {
   return context;
 };
 
-// IMPORTANT: This is a secure approach that works both in dev and production
-// In development, we'll use simple development credentials to make local testing easier
-// In production, we'll use environment variables for security
-const getAdminCredentials = () => {
-  // For development, ALWAYS use these simple credentials to ensure login works
-  if (import.meta.env.DEV) {
-    return { 
-      username: 'admin', // Simple development username
-      password: 'admin123' // Simple development password - ONLY for local use
-    };
-  }
-  
-  // For production, use environment variables (secure method)
-  const envUsername = import.meta.env.VITE_ADMIN_USERNAME;
-  const envPassword = import.meta.env.VITE_ADMIN_PASSWORD;
-  
-  // If production environment variables are set, use them
-  if (envUsername && envPassword) {
-    return { username: envUsername, password: envPassword };
-  }
-  
-  // Final fallback for production if env vars are missing
-  return { 
-    username: 'admin', 
-    password: 'admin123'
-  };
-};
-
-// Get the admin credentials
-const adminCreds = getAdminCredentials();
-
-// Debug credentials info (only in development)
-if (import.meta.env.DEV) {
-  const usingEnvVars = import.meta.env.VITE_ADMIN_USERNAME && import.meta.env.VITE_ADMIN_PASSWORD;
-  console.log('Auth system info:', {
-    usingEnvVars: usingEnvVars,
-    environment: import.meta.env.MODE,
-  });
-}
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Check local storage for existing authentication
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const storedAuth = localStorage.getItem('portfolioAuth');
     return storedAuth === 'true';
   });
-
-  // Login function - returns true if successful
-  const login = (username: string, password: string): boolean => {
-    // Debug login attempt (only in development)
-    if (import.meta.env.DEV) {
-      console.log('Login attempt:', { 
-        username_match: username === adminCreds.username,
-        password_match: password === adminCreds.password,
-        using_credentials: 'From environment or fallback',
-      });
-    }
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Use string paths to reference Convex mutations for more flexibility
+  // This avoids TypeScript errors when the API isn't fully generated yet
+  const loginMutation = useMutation("auth:login");
+  const initAdmin = useMutation("auth:initializeAdmin");
+  
+  // Initialize admin account - only runs once when component mounts
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await initAdmin({});
+      } catch (err) {
+        console.error('Failed to initialize admin:', err);
+      }
+    };
     
-    if (username === adminCreds.username && password === adminCreds.password) {
-      setIsAuthenticated(true);
-      localStorage.setItem('portfolioAuth', 'true');
-      return true;
+    init();
+  }, [initAdmin]);
+
+  // Login function - returns Promise<boolean> for async operation
+  const login = async (username: string, password: string): Promise<boolean> => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const result = await loginMutation({ username, password });
+      
+      if (result.status === 'success') {
+        // Store auth token in localStorage
+        localStorage.setItem('portfolioAuth', 'true');
+        localStorage.setItem('authToken', result.token);
+        localStorage.setItem('username', result.username);
+        
+        setIsAuthenticated(true);
+        return true;
+      } else {
+        setError(result.message || 'Login failed');
+        return false;
+      }
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(err.message || 'An unexpected error occurred');
+      return false;
+    } finally {
+      setIsLoading(false);
     }
-    return false;
   };
 
   // Logout function
   const logout = () => {
-    setIsAuthenticated(false);
     localStorage.removeItem('portfolioAuth');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+    setIsAuthenticated(false);
   };
 
   // Provide the auth context
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, isLoading, error }}>
       {children}
     </AuthContext.Provider>
   );

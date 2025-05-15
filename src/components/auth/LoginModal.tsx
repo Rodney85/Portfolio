@@ -25,14 +25,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Add debugging output for troubleshooting
-    console.log('Modal Login attempt with:', { 
-      username: username,
-      password: password ? '******' : 'empty', // Don't log actual password
-    });
     
     // Clear any previous errors
     setError('');
@@ -43,22 +37,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       return;
     }
     
-    // Attempt to log in
-    const success = login(username, password);
-    
-    console.log('Modal Login result:', { success });
-    
-    if (success) {
-      // Close modal and navigate to admin
-      onClose();
-      navigate('/admin');
-    } else {
-      // If in development mode, show a helpful message about credentials
-      if (import.meta.env.DEV) {
-        console.log('Login hint: If environment variables aren\'t set, try username "admin" with password "admin123"');
-      }
+    try {
+      // Attempt to log in (now async)
+      const success = await login(username, password);
       
-      setError('Invalid username or password');
+      if (success) {
+        // Close modal and navigate to admin
+        onClose();
+        navigate('/admin');
+      }
+      // Error state is now managed by the AuthContext
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred');
     }
   };
 
