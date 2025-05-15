@@ -19,28 +19,23 @@ export const useAuth = () => {
 };
 
 // Get admin credentials from environment variables
-// For development, we hardcode the values we know from the .env file
+// We also provide fallbacks in all environments (not just development)
 // This ensures login works even if environment variables aren't being loaded properly
 let ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
 let ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
+// Use hardcoded values if env vars aren't available in ANY environment
+// This is a safety mechanism to ensure admin access always works
+if (!ADMIN_USERNAME) ADMIN_USERNAME = 'rod852';
+if (!ADMIN_PASSWORD) ADMIN_PASSWORD = 'Qazxsw852#';
+
 // Debug environment variables (only in development)
 if (import.meta.env.DEV) {
-  console.log('Admin credentials check (before fallback):', {
+  console.log('Admin credentials check:', {
     username_defined: !!ADMIN_USERNAME,
     password_defined: !!ADMIN_PASSWORD,
-    env_mode: import.meta.env.MODE
-  });
-  
-  // In development mode, use hardcoded values if env vars aren't available
-  // These match what's in your .env file
-  if (!ADMIN_USERNAME) ADMIN_USERNAME = 'rod852';
-  if (!ADMIN_PASSWORD) ADMIN_PASSWORD = 'Qazxsw852#';
-  
-  console.log('Using credentials:', { 
-    using_fallback: !import.meta.env.VITE_ADMIN_USERNAME || !import.meta.env.VITE_ADMIN_PASSWORD,
-    username_defined: !!ADMIN_USERNAME,
-    password_defined: !!ADMIN_PASSWORD
+    env_mode: import.meta.env.MODE,
+    using_fallback: !import.meta.env.VITE_ADMIN_USERNAME || !import.meta.env.VITE_ADMIN_PASSWORD
   });
 }
 
