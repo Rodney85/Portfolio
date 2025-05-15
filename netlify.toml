@@ -1,0 +1,16 @@
+# Netlify configuration file
+
+# Handle Single Page Application routing
+# All routes should be handled by the index.html file so React Router works
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+[build.environment]
+  # Add any build environment variables here if needed
+  NODE_VERSION = "18"
