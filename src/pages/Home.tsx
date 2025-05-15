@@ -188,7 +188,7 @@ const Home = () => {
                   className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-1.5"
                   style={{ fontFamily: "'Playpen Sans Arabic', cursive", fontWeight: 700 }}
                 >
-                  Nova
+                  Dexor
                   <motion.div
                       animate={{ 
                           rotate: [0, 0, 0, 0, 10, -10, 0],
@@ -209,7 +209,7 @@ const Home = () => {
               
               <div className="space-y-2">
                 <h3 className="font-semibold">Contact:</h3>
-                <p>hello@nova.dev</p>
+                <p>hello@dexor.dev</p>
                 <p>Nairobi, Kenya</p>
               </div>
             </div>

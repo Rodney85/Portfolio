@@ -50,7 +50,7 @@ export function HeroHeader() {
                                         className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent" 
                                         style={{ fontFamily: "'Playpen Sans Arabic', cursive", fontWeight: 700 }}
                                     >
-                                        Nova
+                                        Dexor
                                     </span> 
                                     <motion.div
                                         animate={{ 
