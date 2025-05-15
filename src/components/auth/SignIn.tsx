@@ -55,16 +55,8 @@ const SignIn: React.FC<SignInProps> = () => {
       navigate('/admin');
     } else {
       // More detailed error for troubleshooting
-      console.log('Login failed. Using hardcoded credentials as fallback.');
-      // Try with hardcoded credentials as last resort
-      const fallbackSuccess = username === 'rod852' && password === 'Qazxsw852#';
-      if (fallbackSuccess) {
-        console.log('Fallback credentials worked - bypassing normal auth');
-        setError('');
-        localStorage.setItem('portfolioAuth', 'true');
-        navigate('/admin');
-        return;
-      }
+      console.log('Login failed. Environment variables may not be loaded properly.');
+      // No hardcoded credentials - rely only on environment variables
       
       setError('Invalid username or password');
     }

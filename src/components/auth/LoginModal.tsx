@@ -56,17 +56,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       navigate('/admin');
     } else {
       // More detailed error for troubleshooting
-      console.log('Modal Login failed. Using hardcoded credentials as fallback.');
-      // Try with hardcoded credentials as last resort
-      const fallbackSuccess = username === 'rod852' && password === 'Qazxsw852#';
-      if (fallbackSuccess) {
-        console.log('Fallback credentials worked in modal - bypassing normal auth');
-        setError('');
-        localStorage.setItem('portfolioAuth', 'true');
-        onClose();
-        navigate('/admin');
-        return;
-      }
+      console.log('Modal Login failed. Environment variables may not be loaded properly.');
+      // No hardcoded credentials - rely only on environment variables
       
       setError('Invalid username or password');
     }

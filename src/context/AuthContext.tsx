@@ -18,16 +18,9 @@ export const useAuth = () => {
   return context;
 };
 
-// Get admin credentials from environment variables
-// We also provide fallbacks in all environments (not just development)
-// This ensures login works even if environment variables aren't being loaded properly
-let ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
-let ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
-
-// Use hardcoded values if env vars aren't available in ANY environment
-// This is a safety mechanism to ensure admin access always works
-if (!ADMIN_USERNAME) ADMIN_USERNAME = 'rod852';
-if (!ADMIN_PASSWORD) ADMIN_PASSWORD = 'Qazxsw852#';
+// Get admin credentials exclusively from environment variables for security
+const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 // Debug environment variables (only in development)
 if (import.meta.env.DEV) {
