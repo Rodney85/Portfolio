@@ -9,9 +9,9 @@ import { motion, useScroll } from 'framer-motion'
 import { ThemeToggle } from '../theme/ThemeToggle'
 
 const navLinks = [
-    { name: 'Services', path: '/services' },
+    { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
-    { name: 'Process', path: '/process' },
+    { name: 'About Us', path: '/process', description: 'here we are going to describe our services' },
     { name: 'Contact', path: '/contact' },
 ]
 
@@ -70,7 +70,7 @@ export function HeroHeader() {
                             </Link>
 
                             <div className="flex items-center gap-2">
-                                <ThemeToggle />
+                                
                                 <button
                                     onClick={() => setMenuState(!menuState)}
                                     aria-label={menuState ? 'Close Menu' : 'Open Menu'}
@@ -114,6 +114,7 @@ export function HeroHeader() {
                                 </ul>
                             </div>
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit items-center">
+                                <ThemeToggle />
                                 <Button
                                     asChild
                                     className="bg-orange-500 hover:bg-orange-600"

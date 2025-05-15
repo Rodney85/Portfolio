@@ -185,10 +185,24 @@ const Home = () => {
             <div className="mb-8 md:mb-0">
               <h2 className="text-2xl font-bold mb-3">
                 <span 
-                  className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
+                  className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-1.5"
                   style={{ fontFamily: "'Playpen Sans Arabic', cursive", fontWeight: 700 }}
                 >
                   Nova
+                  <motion.div
+                      animate={{ 
+                          rotate: [0, 0, 0, 0, 10, -10, 0],
+                          scale: [1, 1, 1, 1.1, 1.1, 1]
+                      }}
+                      transition={{ 
+                          duration: 2.5, 
+                          ease: "easeInOut",
+                          repeat: Infinity,
+                          repeatDelay: 3
+                      }}
+                  >
+                      <Gitlab className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
+                  </motion.div>
                 </span>
               </h2>
               <p className="text-muted-foreground mb-4">Business Apps & AI Automation</p>
