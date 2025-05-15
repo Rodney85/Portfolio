@@ -67,10 +67,6 @@ const ProjectCard: React.FC<{ project: ProjectProps; index: number }> = ({ proje
       <Card className="overflow-hidden h-full flex flex-col border border-border/50 hover:border-border/80 transition-all duration-300">
         <CardHeader className="p-0">
           <div className="aspect-video w-full h-[200px] overflow-hidden relative bg-muted/30">
-            {/* Debug information in development mode */}
-            <div className="absolute top-0 right-0 bg-green-600/90 text-xs text-white p-1 z-10 rounded-bl-md">
-              Desktop Preview
-            </div>
             
             {/* Only render the image if we have a URL */}
             {hasImage && (
