@@ -16,7 +16,7 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "dark",
+  theme: "light",
   setTheme: () => null,
 }
 
@@ -24,20 +24,14 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({
   children,
-  defaultTheme = "dark",
+  defaultTheme = "light",
   ...props
 }: ThemeProviderProps) {
   // Fix: Use a string value as the initial state instead of trying to access localStorage directly
   const [theme, setTheme] = useState<Theme>(defaultTheme)
   
-  // Use useEffect to safely access localStorage after component mount
-  useEffect(() => {
-    // Get theme from localStorage or use default
-    const storedTheme = localStorage.getItem("theme") as Theme
-    if (storedTheme) {
-      setTheme(storedTheme)
-    }
-  }, [])
+  // We're not using localStorage to persist theme preferences anymore
+  // This ensures the site always starts in light mode when refreshed
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -45,8 +39,7 @@ export function ThemeProvider({
     root.classList.remove("light", "dark")
     root.classList.add(theme)
     
-    // Save to localStorage
-    localStorage.setItem("theme", theme)
+    // Not saving to localStorage so theme will reset on refresh
   }, [theme])
 
   const value = {
