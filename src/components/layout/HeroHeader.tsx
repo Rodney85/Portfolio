@@ -19,22 +19,44 @@ export function HeroHeader() {
     const [menuState, setMenuState] = React.useState(false)
     const [scrolled, setScrolled] = React.useState(false)
     const location = useLocation()
-
-    const { scrollYProgress } = useScroll()
+    const headerRef = React.useRef<HTMLElement>(null)
 
     React.useEffect(() => {
-        const unsubscribe = scrollYProgress.on('change', (latest) => {
-            setScrolled(latest > 0.05)
-        })
-        return () => unsubscribe()
-    }, [scrollYProgress])
+        // Find the main heading element
+        const headingElement = document.querySelector('h1.max-w-2xl.text-balance.text-4xl')
+        
+        if (!headingElement || !headerRef.current) return
+        
+        // Create intersection observer to detect when heading reaches navbar
+        const observer = new IntersectionObserver(
+            (entries) => {
+                // When heading intersects with navbar area, trigger blur
+                const [entry] = entries
+                setScrolled(!entry.isIntersecting)
+            },
+            {
+                // Root is the viewport
+                root: null,
+                // Start checking when heading is 100px from top of viewport
+                rootMargin: '-100px 0px 0px 0px',
+                // Trigger when any part of the heading is visible
+                threshold: 0
+            }
+        )
+        
+        observer.observe(headingElement)
+        
+        return () => {
+            if (headingElement) observer.unobserve(headingElement)
+        }
+    }, [])
     
     const isActive = (path: string) => {
         return location.pathname === path
     }
 
     return (
-        <header>
+        <header ref={headerRef}>
             <nav
                 data-state={menuState && 'active'}
                 className={cn('group fixed z-20 w-full border-b transition-colors duration-150', scrolled && 'bg-background/50 backdrop-blur-3xl')}>
