@@ -157,7 +157,7 @@ const ProjectDetail = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
                 {project.githubUrl && (
-                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={project.githubUrl.startsWith('http') ? project.githubUrl : `https://${project.githubUrl}`} target="_blank" rel="noopener noreferrer">
                     <Button className="flex items-center">
                       <Github className="mr-2 h-4 w-4" /> GitHub Repository
                     </Button>
@@ -165,7 +165,7 @@ const ProjectDetail = () => {
                 )}
                 
                 {project.liveUrl && (
-                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={project.liveUrl.startsWith('http') ? project.liveUrl : `https://${project.liveUrl}`} target="_blank" rel="noopener noreferrer">
                     <Button variant="default" className="flex items-center bg-primary hover:bg-primary/90">
                       <ExternalLink className="mr-2 h-4 w-4" /> Live URL
                     </Button>
