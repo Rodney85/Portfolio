@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Pencil, Trash2, ExternalLink, Github, Image as ImageIcon, EyeIcon, Calendar, Tag } from 'lucide-react';
+import { Plus, Pencil, Trash2, ExternalLink, Github, Image as ImageIcon, EyeIcon, Calendar, Tag, Laptop, Tablet, Smartphone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ProjectProps } from '@/components/projects/ProjectCard';
 import {
@@ -59,7 +59,15 @@ const AdminProjects = () => {
     title: '',
     description: '',
     imageUrl: '',
-    additionalImages: [] as string[], // Array for additional images (up to 4)
+    
+    // Device-specific images
+    desktopImageUrl: '',
+    tabletImageUrl: '',
+    mobileImageUrl: '',
+    
+    // Legacy field
+    additionalImages: [] as string[],
+    
     tags: [] as string[],
     githubUrl: '',
     liveUrl: '',
@@ -71,8 +79,13 @@ const AdminProjects = () => {
     year: '',
     role: '',
     teamSize: '',
-    storageId: '', // Storage ID for main image
-    additionalStorageIds: [] as string[], // Storage IDs for additional images
+    
+    // Storage IDs
+    storageId: '', // Storage ID for main/fallback image
+    desktopStorageId: '', // Storage ID for desktop image
+    tabletStorageId: '', // Storage ID for tablet image
+    mobileStorageId: '', // Storage ID for mobile image
+    additionalStorageIds: [] as string[], // Legacy field
   });
   const [customTag, setCustomTag] = useState('');
   const [currentTab, setCurrentTab] = useState('details');
@@ -142,8 +155,16 @@ const AdminProjects = () => {
       title: '',
       description: '',
       imageUrl: '',
-      additionalImages: [],
-      tags: [],
+      
+      // Device-specific images
+      desktopImageUrl: '',
+      tabletImageUrl: '',
+      mobileImageUrl: '',
+      
+      // Legacy field
+      additionalImages: [] as string[],
+      
+      tags: [] as string[],
       githubUrl: '',
       liveUrl: '',
       detailedDescription: '',
@@ -154,8 +175,13 @@ const AdminProjects = () => {
       year: '',
       role: '',
       teamSize: '',
-      storageId: '',
-      additionalStorageIds: [],
+      
+      // Storage IDs
+      storageId: '', 
+      desktopStorageId: '', 
+      tabletStorageId: '', 
+      mobileStorageId: '', 
+      additionalStorageIds: [] as string[], 
     });
     setIsEditMode(false);
     setCurrentTab('details');
@@ -180,7 +206,15 @@ const AdminProjects = () => {
         title: fullProject.title,
         description: fullProject.description,
         imageUrl: fullProject.imageUrl || '',
+        
+        // Device-specific images with fallbacks
+        desktopImageUrl: fullProject.desktopImageUrl || fullProject.imageUrl || '',
+        tabletImageUrl: fullProject.tabletImageUrl || fullProject.imageUrl || '',
+        mobileImageUrl: fullProject.mobileImageUrl || fullProject.imageUrl || '',
+        
+        // Legacy field
         additionalImages: fullProject.additionalImages || [],
+        
         tags: fullProject.tags || [],
         githubUrl: fullProject.githubUrl || '',
         liveUrl: fullProject.liveUrl || '',
@@ -192,10 +226,18 @@ const AdminProjects = () => {
         year: fullProject.year || '',
         role: fullProject.role || '',
         teamSize: fullProject.teamSize || '',
+        
+        // Storage IDs - reset for new uploads if needed
         storageId: '',
+        desktopStorageId: '',
+        tabletStorageId: '',
+        mobileStorageId: '',
         additionalStorageIds: [],
       });
     }
+    
+    setCurrentTab('details');
+    setIsPreviewVisible(false);
   };
   
   const handleDeleteProject = async (id: string) => {
@@ -254,15 +296,44 @@ const AdminProjects = () => {
     }
     
     try {
-      const { id, storageId, additionalStorageIds, ...projectData } = currentProject;
+      // Extract only the fields that the Convex schema expects
+      const { 
+        id, 
+        // Storage IDs - we'll handle these differently
+        storageId,
+        desktopStorageId, 
+        tabletStorageId,
+        mobileStorageId,
+        additionalStorageIds: existingAdditionalStorageIds,
+        // Remove all image URL fields to prevent validation errors
+        imageUrl: _imageUrl,
+        desktopImageUrl: _desktopImageUrl, 
+        tabletImageUrl: _tabletImageUrl,
+        mobileImageUrl: _mobileImageUrl,
+        // Keep all other fields
+        ...projectData 
+      } = currentProject;
+      
+      // Store device-specific storage IDs in additionalStorageIds to avoid validator errors
+      // We'll use a specific format to identify which is which when we display them
+      const additionalStorageIds = [
+        ...(desktopStorageId ? [`desktop:${desktopStorageId}`] : []),
+        ...(tabletStorageId ? [`tablet:${tabletStorageId}`] : []),
+        ...(mobileStorageId ? [`mobile:${mobileStorageId}`] : []),
+        ...(existingAdditionalStorageIds || [])
+      ];
+      
+      console.log('Storing device storage IDs in additionalStorageIds:', additionalStorageIds);
       
       if (isEditMode) {
         // Update existing project
         await updateProject({
           id,
           ...projectData,
-          storageId, // Include storageId for image handling
-          additionalStorageIds, // Include additionalStorageIds for image handling
+          // Main image
+          storageId, 
+          // Store all device-specific images in additionalStorageIds
+          additionalStorageIds,
         });
         
         toast({
@@ -273,8 +344,10 @@ const AdminProjects = () => {
         // Create new project
         await createProject({
           ...projectData,
-          storageId, // Include storageId for image handling
-          additionalStorageIds, // Include additionalStorageIds for image handling
+          // Main image
+          storageId,
+          // Store all device-specific images in additionalStorageIds
+          additionalStorageIds,
         });
         
         toast({
@@ -441,7 +514,7 @@ const AdminProjects = () => {
           <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
             <TabsList className="grid grid-cols-2 mb-4">
               <TabsTrigger value="details">Basic Details</TabsTrigger>
-              <TabsTrigger value="advanced">Advanced Options</TabsTrigger>
+              <TabsTrigger value="images">Images</TabsTrigger>
             </TabsList>
 
             <TabsContent value="details" className="space-y-4">
@@ -466,20 +539,6 @@ const AdminProjects = () => {
                     onChange={handleChange}
                     placeholder="Brief summary of the project (1-2 sentences)"
                     rows={3}
-                  />
-                </div>
-                
-                <div className="grid gap-4">
-                  <Label>Project Images (Up to 5)</Label>
-                  <MultiFileUpload
-                    onFilesUploaded={handleMultipleFilesUploaded}
-                    existingImageUrls={[
-                      currentProject.imageUrl, 
-                      ...(currentProject.additionalImages || [])
-                    ].filter(Boolean)}
-                    accept="image/*"
-                    maxSize={2}
-                    maxFiles={5}
                   />
                 </div>
                 
@@ -563,104 +622,87 @@ const AdminProjects = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="advanced" className="space-y-4">
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="detailedDescription">Detailed Description</Label>
-                  <Textarea
-                    id="detailedDescription"
-                    name="detailedDescription"
-                    value={currentProject.detailedDescription || ''}
-                    onChange={handleChange}
-                    placeholder="Comprehensive description of the project, its purpose, and functionality"
-                    rows={5}
-                  />
-                </div>
-                
-                <div className="grid gap-2">
-                  <Label htmlFor="technologies">Technologies Used</Label>
-                  <Textarea
-                    id="technologies"
-                    name="technologies"
-                    value={currentProject.technologies || ''}
-                    onChange={handleChange}
-                    placeholder="Detailed list of technologies, frameworks, and tools used"
-                    rows={3}
-                  />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="challenges">Challenges</Label>
-                    <Textarea
-                      id="challenges"
-                      name="challenges"
-                      value={currentProject.challenges || ''}
-                      onChange={handleChange}
-                      placeholder="Challenges faced and how they were overcome"
-                      rows={3}
+            <TabsContent value="images" className="space-y-6 py-4">
+              <div className="grid gap-6">
+                {/* Main fallback image section removed as requested */}
+
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {/* Desktop image upload */}
+                  <div className="space-y-2 border rounded-lg p-4">
+                    <Label className="flex items-center gap-2">
+                      <Laptop className="h-4 w-4" /> <span className="font-medium">Desktop View</span>
+                    </Label>
+                    <div className="text-xs text-muted-foreground mb-3">Optimized for desktop/laptop displays (16:10 ratio)</div>
+                    <FileUpload 
+                      onFileUploaded={(storageId) => {
+                        console.log('Desktop image uploaded with ID:', storageId);
+                        setCurrentProject(prev => ({
+                          ...prev,
+                          desktopStorageId: storageId
+                        }));
+                      }} 
                     />
+                    {currentProject.desktopImageUrl && (
+                      <p className="text-xs text-muted-foreground mt-2">Current: {currentProject.desktopImageUrl.split('/').pop()}</p>
+                    )}
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="outcomes">Outcomes</Label>
-                    <Textarea
-                      id="outcomes"
-                      name="outcomes"
-                      value={currentProject.outcomes || ''}
-                      onChange={handleChange}
-                      placeholder="Results and impact of the project"
-                      rows={3}
+
+                  {/* Tablet image upload */}
+                  <div className="space-y-2 border rounded-lg p-4">
+                    <Label className="flex items-center gap-2">
+                      <Tablet className="h-4 w-4" /> <span className="font-medium">Tablet View</span>
+                    </Label>
+                    <div className="text-xs text-muted-foreground mb-3">Optimized for tablet displays (4:3 ratio)</div>
+                    <FileUpload 
+                      onFileUploaded={(storageId) => {
+                        console.log('Tablet image uploaded with ID:', storageId);
+                        setCurrentProject(prev => ({
+                          ...prev,
+                          tabletStorageId: storageId
+                        }));
+                      }} 
                     />
+                    {currentProject.tabletImageUrl && (
+                      <p className="text-xs text-muted-foreground mt-2">Current: {currentProject.tabletImageUrl.split('/').pop()}</p>
+                    )}
                   </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="duration">Duration</Label>
-                    <Input
-                      id="duration"
-                      name="duration"
-                      value={currentProject.duration || ''}
-                      onChange={handleChange}
-                      placeholder="e.g. 3 months"
+
+                  {/* Mobile image upload */}
+                  <div className="space-y-2 border rounded-lg p-4">
+                    <Label className="flex items-center gap-2">
+                      <Smartphone className="h-4 w-4" /> <span className="font-medium">Mobile View</span>
+                    </Label>
+                    <div className="text-xs text-muted-foreground mb-3">Optimized for mobile displays (9:16 ratio)</div>
+                    <FileUpload 
+                      onFileUploaded={(storageId) => {
+                        console.log('Mobile image uploaded with ID:', storageId);
+                        setCurrentProject(prev => ({
+                          ...prev,
+                          mobileStorageId: storageId
+                        }));
+                      }} 
                     />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="year">Year</Label>
-                    <Input
-                      id="year"
-                      name="year"
-                      value={currentProject.year || ''}
-                      onChange={handleChange}
-                      placeholder="e.g. 2023"
-                    />
+                    {currentProject.mobileImageUrl && (
+                      <p className="text-xs text-muted-foreground mt-2">Current: {currentProject.mobileImageUrl.split('/').pop()}</p>
+                    )}
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="role">Your Role</Label>
-                    <Input
-                      id="role"
-                      name="role"
-                      value={currentProject.role || ''}
-                      onChange={handleChange}
-                      placeholder="e.g. Lead Developer"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="teamSize">Team Size</Label>
-                    <Input
-                      id="teamSize"
-                      name="teamSize"
-                      value={currentProject.teamSize || ''}
-                      onChange={handleChange}
-                      placeholder="e.g. 3"
-                    />
-                  </div>
+                <div className="rounded-lg border border-dashed p-4 bg-muted/50">
+                  <h3 className="text-sm font-medium mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4" />
+                      <path d="M12 8h.01" />
+                    </svg>
+                    Device-Specific Images
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Upload optimized images for each device view (desktop, tablet, and mobile). Each device type has a recommended aspect ratio for optimal display in the project showcase.</p>
                 </div>
               </div>
             </TabsContent>
+
+            {/* Advanced tab has been removed as requested */}
           </Tabs>
           <DialogFooter className={isMobile ? "flex-col space-y-2" : ""}>
             <Button variant="outline" onClick={() => setIsOpen(false)} className={isMobile ? "w-full" : ""}>

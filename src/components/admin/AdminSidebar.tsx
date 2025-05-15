@@ -96,7 +96,7 @@ const AdminSidebar = ({ onClose }: AdminSidebarProps = {}) => {
       <div className="p-4 border-b">
         <Link to="/" className="flex items-center gap-2">
           <span className="font-bold text-xl bg-gradient-to-r from-tech-purple to-orange-500 bg-clip-text text-transparent">
-            Rodney.dev
+            Nova
           </span>
         </Link>
       </div>

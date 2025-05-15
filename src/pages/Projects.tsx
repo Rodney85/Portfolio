@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Monitor, Tablet, Smartphone } from 'lucide-react';
 import ProjectCard from '@/components/projects/ProjectCard';
 import SectionHeading from '@/components/ui/section-heading';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { api } from '@/convex/_generated/api';
 const Projects = () => {
   const [filter, setFilter] = useState<string | null>(null);
   const [formattedProjects, setFormattedProjects] = useState<any[]>([]);
+  const [activeView, setActiveView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const isMobile = useIsMobile();
   
   // Fetch projects from Convex
@@ -20,12 +21,25 @@ const Projects = () => {
   // Process projects from Convex when they arrive
   useEffect(() => {
     if (convexProjects && convexProjects.length > 0) {
-      // Convert Convex projects to our ProjectProps format
+      // Convert Convex projects to our ProjectProps format with all necessary properties
       const projects = convexProjects.map(project => ({
         id: project._id,
         title: project.title,
         description: project.description,
+        
+        // Include all image URLs
         imageUrl: project.imageUrl || '',
+        // Device-specific images with fallbacks
+        desktopImageUrl: project.desktopImageUrl || project.imageUrl || '',
+        tabletImageUrl: project.tabletImageUrl || project.imageUrl || '',
+        mobileImageUrl: project.mobileImageUrl || project.imageUrl || '',
+        
+        // Include storage IDs for future reference
+        fileId: project.fileId,
+        desktopStorageId: project.desktopStorageId,
+        tabletStorageId: project.tabletStorageId,
+        mobileStorageId: project.mobileStorageId,
+        
         additionalImages: project.additionalImages || [],
         tags: project.tags,
         githubUrl: project.githubUrl || '',

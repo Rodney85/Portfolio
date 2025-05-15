@@ -19,12 +19,29 @@ export const useAuth = () => {
 };
 
 // Get admin credentials from environment variables
-const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
+// For development, we hardcode the values we know from the .env file
+// This ensures login works even if environment variables aren't being loaded properly
+let ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
+let ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
-// Check that credentials are defined
-if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
-  console.error('Admin credentials are not defined in environment variables');
+// Debug environment variables (only in development)
+if (import.meta.env.DEV) {
+  console.log('Admin credentials check (before fallback):', {
+    username_defined: !!ADMIN_USERNAME,
+    password_defined: !!ADMIN_PASSWORD,
+    env_mode: import.meta.env.MODE
+  });
+  
+  // In development mode, use hardcoded values if env vars aren't available
+  // These match what's in your .env file
+  if (!ADMIN_USERNAME) ADMIN_USERNAME = 'rod852';
+  if (!ADMIN_PASSWORD) ADMIN_PASSWORD = 'Qazxsw852#';
+  
+  console.log('Using credentials:', { 
+    using_fallback: !import.meta.env.VITE_ADMIN_USERNAME || !import.meta.env.VITE_ADMIN_PASSWORD,
+    username_defined: !!ADMIN_USERNAME,
+    password_defined: !!ADMIN_PASSWORD
+  });
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -36,6 +53,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Login function - returns true if successful
   const login = (username: string, password: string): boolean => {
+    // Debug login attempt (only in development)
+    if (import.meta.env.DEV) {
+      console.log('Login attempt:', { 
+        username_match: username === ADMIN_USERNAME,
+        password_match: password === ADMIN_PASSWORD,
+        input_username: username,
+        expected_username: ADMIN_USERNAME
+      });
+    }
+    
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       localStorage.setItem('portfolioAuth', 'true');

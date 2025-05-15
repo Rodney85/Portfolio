@@ -8,8 +8,22 @@ export default defineSchema({
     title: v.string(),
     description: v.string(),
     imageUrl: v.optional(v.string()), // Main image URL (keeping for backward compatibility)
-    // Additional image URLs (up to 5 total including the main imageUrl)
+    storageId: v.optional(v.string()), // Storage ID for main image
+    
+    // Device-specific image URLs
+    desktopImageUrl: v.optional(v.string()), // Desktop view image
+    tabletImageUrl: v.optional(v.string()), // Tablet view image
+    mobileImageUrl: v.optional(v.string()), // Mobile view image
+    
+    // Device-specific storage IDs
+    desktopStorageId: v.optional(v.string()), // Storage ID for desktop image
+    tabletStorageId: v.optional(v.string()), // Storage ID for tablet image
+    mobileStorageId: v.optional(v.string()), // Storage ID for mobile image
+    
+    // Legacy fields - keeping for backward compatibility
     additionalImages: v.optional(v.array(v.string())),
+    additionalStorageIds: v.optional(v.array(v.string())),
+    
     tags: v.array(v.string()),
     githubUrl: v.optional(v.string()),
     liveUrl: v.optional(v.string()),

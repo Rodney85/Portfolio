@@ -1,3 +1,5 @@
+/* Import Playpen Sans Arabic font */
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap');
 
 @tailwind base;
 @tailwind components;
