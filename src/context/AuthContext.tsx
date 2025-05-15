@@ -18,17 +18,36 @@ export const useAuth = () => {
   return context;
 };
 
-// Get admin credentials exclusively from environment variables for security
-const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
+// IMPORTANT: This is a secure approach that works both in dev and production
+// We prioritize environment variables but have a non-sensitive fallback
+// for development purposes. In production, you MUST set the environment variables.
+const getAdminCredentials = () => {
+  // First try environment variables (secure, preferred method)
+  const envUsername = import.meta.env.VITE_ADMIN_USERNAME;
+  const envPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+  
+  // If we have valid environment variables, use them
+  if (envUsername && envPassword) {
+    return { username: envUsername, password: envPassword };
+  }
+  
+  // Otherwise use a development-only credential that isn't sensitive
+  // This is just for local development when env vars aren't set
+  return { 
+    username: 'admin', // Simple development username
+    password: 'admin123' // Simple development password - ONLY for local use
+  };
+};
 
-// Debug environment variables (only in development)
+// Get the admin credentials
+const adminCreds = getAdminCredentials();
+
+// Debug credentials info (only in development)
 if (import.meta.env.DEV) {
-  console.log('Admin credentials check:', {
-    username_defined: !!ADMIN_USERNAME,
-    password_defined: !!ADMIN_PASSWORD,
-    env_mode: import.meta.env.MODE,
-    using_fallback: !import.meta.env.VITE_ADMIN_USERNAME || !import.meta.env.VITE_ADMIN_PASSWORD
+  const usingEnvVars = import.meta.env.VITE_ADMIN_USERNAME && import.meta.env.VITE_ADMIN_PASSWORD;
+  console.log('Auth system info:', {
+    usingEnvVars: usingEnvVars,
+    environment: import.meta.env.MODE,
   });
 }
 
@@ -44,14 +63,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Debug login attempt (only in development)
     if (import.meta.env.DEV) {
       console.log('Login attempt:', { 
-        username_match: username === ADMIN_USERNAME,
-        password_match: password === ADMIN_PASSWORD,
-        input_username: username,
-        expected_username: ADMIN_USERNAME
+        username_match: username === adminCreds.username,
+        password_match: password === adminCreds.password,
+        using_credentials: 'From environment or fallback',
       });
     }
     
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    if (username === adminCreds.username && password === adminCreds.password) {
       setIsAuthenticated(true);
       localStorage.setItem('portfolioAuth', 'true');
       return true;

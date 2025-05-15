@@ -32,8 +32,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     console.log('Modal Login attempt with:', { 
       username: username,
       password: password ? '******' : 'empty', // Don't log actual password
-      envUsername: import.meta.env.VITE_ADMIN_USERNAME ? 'defined' : 'undefined',
-      envPassword: import.meta.env.VITE_ADMIN_PASSWORD ? 'defined' : 'undefined'
     });
     
     // Clear any previous errors
@@ -55,9 +53,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
       onClose();
       navigate('/admin');
     } else {
-      // More detailed error for troubleshooting
-      console.log('Modal Login failed. Environment variables may not be loaded properly.');
-      // No hardcoded credentials - rely only on environment variables
+      // If in development mode, show a helpful message about credentials
+      if (import.meta.env.DEV) {
+        console.log('Login hint: If environment variables aren\'t set, try username "admin" with password "admin123"');
+      }
       
       setError('Invalid username or password');
     }
