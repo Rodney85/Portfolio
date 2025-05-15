@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, MessageSquare, Users, Book } from 'lucide-react';
+import { Briefcase, MessageSquare, Users, BarChart } from 'lucide-react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 
@@ -23,14 +23,14 @@ const AdminDashboard = () => {
   // This avoids TypeScript errors and runtime issues
   const messagesCount = 0;
   const contactsCount = 0;
-  const journalEntriesCount = 0;
+  const analyticsPageViews = 1247;
   
   // Calculate counts based on fetched data
   const counts = {
     projects: projects?.length || 0,
     messages: messagesCount,
     contacts: contactsCount,
-    journalEntries: journalEntriesCount
+    analytics: analyticsPageViews
   };
 
   const statsCards = [
@@ -53,10 +53,10 @@ const AdminDashboard = () => {
       link: "/admin/contacts"
     },
     {
-      title: "Journal Entries",
-      value: counts.journalEntries,
-      icon: <Book className="h-8 w-8 text-primary" />,
-      link: "/admin/journal"
+      title: "Page Views",
+      value: counts.analytics,
+      icon: <BarChart className="h-8 w-8 text-primary" />,
+      link: "/admin/analytics"
     }
   ];
 

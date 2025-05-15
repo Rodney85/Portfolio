@@ -22,7 +22,7 @@ import AdminProjects from "./pages/admin/Projects";
 import AdminMessages from "./pages/admin/Messages";
 import AdminContacts from "./pages/admin/Contacts";
 import AdminConversations from "./pages/admin/Conversations";
-import AdminJournal from "./pages/admin/Journal";
+import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
 
 // Auth imports
@@ -67,7 +67,7 @@ const AnimatedRoutes = () => {
           <Route path="messages" element={<AdminMessages />} />
           <Route path="contacts" element={<AdminContacts />} />
           <Route path="conversations" element={<AdminConversations />} />
-          <Route path="journal" element={<AdminJournal />} />
+          <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
         
