@@ -183,7 +183,14 @@ const Home = () => {
         <div className="container-custom">
           <div className="flex flex-col md:flex-row justify-between items-start">
             <div className="mb-8 md:mb-0">
-              <h2 className="text-2xl font-bold mb-3">NOVA</h2>
+              <h2 className="text-2xl font-bold mb-3">
+                <span 
+                  className="bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
+                  style={{ fontFamily: "'Playpen Sans Arabic', cursive", fontWeight: 700 }}
+                >
+                  Nova
+                </span>
+              </h2>
               <p className="text-muted-foreground mb-4">Business Apps & AI Automation</p>
               
               <div className="space-y-2">
