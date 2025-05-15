@@ -19,23 +19,30 @@ export const useAuth = () => {
 };
 
 // IMPORTANT: This is a secure approach that works both in dev and production
-// We prioritize environment variables but have a non-sensitive fallback
-// for development purposes. In production, you MUST set the environment variables.
+// In development, we'll use simple development credentials to make local testing easier
+// In production, we'll use environment variables for security
 const getAdminCredentials = () => {
-  // First try environment variables (secure, preferred method)
+  // For development, ALWAYS use these simple credentials to ensure login works
+  if (import.meta.env.DEV) {
+    return { 
+      username: 'admin', // Simple development username
+      password: 'admin123' // Simple development password - ONLY for local use
+    };
+  }
+  
+  // For production, use environment variables (secure method)
   const envUsername = import.meta.env.VITE_ADMIN_USERNAME;
   const envPassword = import.meta.env.VITE_ADMIN_PASSWORD;
   
-  // If we have valid environment variables, use them
+  // If production environment variables are set, use them
   if (envUsername && envPassword) {
     return { username: envUsername, password: envPassword };
   }
   
-  // Otherwise use a development-only credential that isn't sensitive
-  // This is just for local development when env vars aren't set
+  // Final fallback for production if env vars are missing
   return { 
-    username: 'admin', // Simple development username
-    password: 'admin123' // Simple development password - ONLY for local use
+    username: 'admin', 
+    password: 'admin123'
   };
 };
 
