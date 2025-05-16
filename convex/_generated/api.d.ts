@@ -13,6 +13,8 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as analytics_index from "../analytics/index.js";
+import type * as analytics from "../analytics.js";
 import type * as auth from "../auth.js";
 import type * as backblaze from "../backblaze.js";
 import type * as contacts from "../contacts.js";
@@ -30,6 +32,8 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "analytics/index": typeof analytics_index;
+  analytics: typeof analytics;
   auth: typeof auth;
   backblaze: typeof backblaze;
   contacts: typeof contacts;

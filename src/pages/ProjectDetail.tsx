@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useAnalytics } from '@/lib/analytics';
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +15,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [activeView, setActiveView] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const { logEvent } = useAnalytics();
   
   // Fetch all projects from Convex
   const convexProjects = useQuery(api.projects.getAll as any);
@@ -28,6 +30,11 @@ const ProjectDetail = () => {
     if (convexProjects && id) {
       // Find the project with matching ID
       const foundProject = convexProjects.find(p => p._id === id);
+      
+      // Log project view for analytics when a valid project is found
+      if (foundProject) {
+        logEvent("project_view", { projectId: id as any });
+      }
       
       if (foundProject) {
         // Format project data
@@ -165,7 +172,15 @@ const ProjectDetail = () => {
                 )}
                 
                 {project.liveUrl && (
-                  <a href={project.liveUrl.startsWith('http') ? project.liveUrl : `https://${project.liveUrl}`} target="_blank" rel="noopener noreferrer">
+                  <a 
+                    href={project.liveUrl.startsWith('http') ? project.liveUrl : `https://${project.liveUrl}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      // Track live URL clicks for analytics
+                      logEvent("live_click", { projectId: project.id as any });
+                    }}
+                  >
                     <Button variant="default" className="flex items-center bg-primary hover:bg-primary/90">
                       <ExternalLink className="mr-2 h-4 w-4" /> Live URL
                     </Button>

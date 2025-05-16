@@ -8,7 +8,7 @@
  * the standard api.analytics.X references can be used directly.
  */
 
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import type { FunctionReference } from "convex/server";
 
 // Create an object that mimics what the api.analytics namespace will look like
@@ -20,7 +20,10 @@ export const analyticsAPI = {
   getViewsByProject: {} as FunctionReference<"query">,
   getTrafficSources: {} as FunctionReference<"query">,
   getDeviceBreakdown: {} as FunctionReference<"query">,
-  getLiveClicks: {} as FunctionReference<"query">
+  getLiveClicks: {} as FunctionReference<"query">,
+  // Mutations
+  clearAnalytics: {} as FunctionReference<"mutation">,
+  logEvent: {} as FunctionReference<"mutation">
 };
 
 // Function that takes a query string and returns a result
@@ -33,4 +36,13 @@ export function useAnalyticsQueryWithoutTypeError<T>(queryName: string): T | und
     console.error(`Error querying ${queryName}: `, error);
     return undefined;
   }
+}
+
+// Function that takes a mutation string and returns a mutation function
+// without TypeScript complaining
+export function useAnalyticsMutationWithoutTypeError<T>(
+  mutationName: string
+): (args?: any) => Promise<T> {
+  // @ts-ignore - Explicitly ignore the TypeScript error for useMutation
+  return useMutation(mutationName);
 }

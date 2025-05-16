@@ -1,11 +1,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { BarChart, PieChart, ArrowUpRight, TrendingUp, MousePointerClick, Clock, Eye, Smartphone, Tablet, Monitor } from 'lucide-react';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { FunctionReference } from 'convex/server';
-import { useAnalyticsQueryWithoutTypeError } from '@/lib/convexHelpers';
+import { useAnalyticsQueryWithoutTypeError, useAnalyticsMutationWithoutTypeError } from '@/lib/convexHelpers';
+import { Button } from '@/components/ui/button';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 
 // Define types for our analytics data
 type DeviceBreakdown = {
@@ -44,6 +47,58 @@ type AllAnalyticsResponse = {
   popularPages: PopularPage[];
   topReferrers: Referrer[];
   projectStats: ProjectStat[];
+};
+
+// Clear Analytics Button component
+const ClearAnalyticsButton = () => {
+  // Use our helper approach to get the clearAnalytics function
+  // Since we put the function in the analytics.ts file, we need to use 'analytics:clearAnalytics'
+  // Using helper function to avoid type errors until Convex types are fixed
+  const clearAnalyticsMutation = useAnalyticsMutationWithoutTypeError<{deleted: number}>("analytics:clearAnalytics");
+  const [isClearing, setIsClearing] = React.useState(false);
+  
+  const handleClearAnalytics = async () => {
+    try {
+      setIsClearing(true);
+      const result = await clearAnalyticsMutation();
+      toast.success(`Analytics cleared! Deleted ${result.deleted} events.`);
+      // Reload the page to show cleared data
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to clear analytics:", error);
+      toast.error("Failed to clear analytics");
+    } finally {
+      setIsClearing(false);
+    }
+  };
+  
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" size="sm">
+          Clear Analytics Data
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Clear Analytics Data?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete all analytics data. This action cannot be undone.
+            Use this only for testing purposes.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction 
+            onClick={handleClearAnalytics}
+            disabled={isClearing}
+          >
+            {isClearing ? "Clearing..." : "Yes, Clear All Data"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 };
 
 const AdminAnalytics = () => {
@@ -141,10 +196,17 @@ const AdminAnalytics = () => {
   ];
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Analytics Dashboard</h2>
-        <div className="text-sm text-muted-foreground">Last updated: Today at {new Date().toLocaleTimeString()}</div>
+    <div className="space-y-4 pb-8">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
+          <p className="text-muted-foreground">
+            Track visitor statistics and engagement for your portfolio
+          </p>
+        </div>
+        <div>
+          <ClearAnalyticsButton />
+        </div>
       </div>
       
       {/* Overview Cards */}

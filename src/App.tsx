@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from "./components/theme/ThemeProvider";
+import { useAnalytics } from "@/lib/analytics";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
@@ -20,8 +21,6 @@ import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProjects from "./pages/admin/Projects";
 import AdminMessages from "./pages/admin/Messages";
-import AdminContacts from "./pages/admin/Contacts";
-import AdminConversations from "./pages/admin/Conversations";
 import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
 
@@ -45,6 +44,13 @@ const ScrollToTop = () => {
 // AnimatePresence wrapper component to access location
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const { logEvent } = useAnalytics();
+  
+  // Track page views on route changes
+  useEffect(() => {
+    // Log the pageview with current path
+    logEvent("pageview");
+  }, [location.pathname, logEvent]);
   
   return (
     <AnimatePresence mode="wait">
@@ -65,8 +71,6 @@ const AnimatedRoutes = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="messages" element={<AdminMessages />} />
-          <Route path="contacts" element={<AdminContacts />} />
-          <Route path="conversations" element={<AdminConversations />} />
           <Route path="analytics" element={<AdminAnalytics />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

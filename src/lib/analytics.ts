@@ -1,6 +1,7 @@
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
-import { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // Define a simplified version of the Id type for use in this file
 type Id<TableName extends string> = string & { readonly _brand: unique symbol; };
@@ -71,6 +72,32 @@ export const isDoNotTrackEnabled = (): boolean => {
 };
 
 /**
+ * Generate or retrieve a visitor ID
+ */
+export const getVisitorId = (): string => {
+  if (typeof window === "undefined") return ""; // SSR fallback
+  
+  // Check if we already have a visitor ID in localStorage
+  const storedVisitorId = localStorage.getItem("visitorId");
+  
+  if (storedVisitorId) {
+    return storedVisitorId;
+  }
+  
+  // Generate a new UUID for this visitor
+  const newVisitorId = uuidv4();
+  
+  // Store it for future visits
+  try {
+    localStorage.setItem("visitorId", newVisitorId);
+  } catch (e) {
+    console.error("Failed to store visitor ID:", e);
+  }
+  
+  return newVisitorId;
+};
+
+/**
  * Hook for analytics event logging
  */
 export function useAnalytics() {
@@ -81,11 +108,23 @@ export function useAnalytics() {
     (api.analytics?.logEvent) ? api.analytics.logEvent : "analytics:logEvent"
   );
   
+  // Generate visitor ID on mount
+  const [visitorId, setVisitorId] = useState<string>("");
+  
+  useEffect(() => {
+    // Only run in browser
+    if (typeof window === "undefined") return;
+    
+    // Get or generate visitor ID
+    setVisitorId(getVisitorId());
+  }, []);
+  
   const logEvent = useCallback((
     eventType: EventType, 
     additionalData: {
       path?: string;
       projectId?: Id<"projects">;
+      isAdmin?: boolean;
     } = {}
   ) => {
     // Respect Do Not Track
@@ -96,6 +135,12 @@ export function useAnalytics() {
     
     // Get current path if not provided
     const path = additionalData.path || window.location.pathname;
+    
+    // Skip tracking for admin routes
+    if (path.startsWith('/admin') || additionalData.isAdmin) {
+      console.debug("Analytics skipped for admin route:", path);
+      return;
+    }
     
     // Get device information
     const device = getDeviceType();
@@ -112,6 +157,7 @@ export function useAnalytics() {
       path,
       device,
       referrer,
+      visitorId, // Include the unique visitor ID with each event
       projectId: additionalData.projectId,
       ...utmParams
     }).catch(err => {

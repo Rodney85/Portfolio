@@ -1,6 +1,6 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query } from "../_generated/server";
 import { v } from "convex/values";
-import { Doc, Id } from "./_generated/dataModel";
+import { Doc, Id } from "../_generated/dataModel";
 
 // Define types for analytics events
 type EventType = "pageview" | "project_view" | "live_click";
@@ -10,7 +10,6 @@ type Device = "desktop" | "tablet" | "mobile";
 interface AnalyticsEvent {
   eventType: EventType;
   path: string;
-  visitorId?: string;
   projectId?: Id<"projects">;
   referrer?: string;
   utmSource?: string;
@@ -184,19 +183,18 @@ export const getDeviceBreakdown = query({
       .query("analytics")
       .withIndex("by_eventType", (q) => q.eq("eventType", "pageview"))
       .collect();
-    
-    // Count events by device type
-    const counts = pageviews.reduce<Record<string, number>>((acc, event) => {
-      const device = event.device || "unknown";
+      
+    // Count by device type
+    const deviceCounts = pageviews.reduce<Record<string, number>>((acc, event) => {
+      const device = event.device;
       acc[device] = (acc[device] || 0) + 1;
       return acc;
     }, {});
     
     return {
-      desktop: counts["desktop"] || 0,
-      tablet: counts["tablet"] || 0,
-      mobile: counts["mobile"] || 0,
-      other: counts["unknown"] || 0,
+      desktop: deviceCounts["desktop"] || 0,
+      tablet: deviceCounts["tablet"] || 0,
+      mobile: deviceCounts["mobile"] || 0
     };
   },
 });
@@ -206,10 +204,9 @@ export const getDeviceBreakdown = query({
  */
 export const getLiveClicks = query({
   handler: async (ctx) => {
-    // Get all projects
     const projects = await ctx.db.query("projects").collect();
     
-    // Get live click events
+    // Get click events for live URLs
     const liveClicks = await ctx.db
       .query("analytics")
       .withIndex("by_eventType", (q) => q.eq("eventType", "live_click"))
@@ -224,15 +221,18 @@ export const getLiveClicks = query({
       return acc;
     }, {});
     
-    // Map counts to projects
-    const result = projects.map(project => {
-      const id = project._id.toString();
-      return {
-        id,
-        title: project.title,
-        clicks: clicksByProjectId[id] || 0,
-      };
-    });
+    // Map counts to projects with live URLs
+    const result = projects
+      .filter(project => project.liveUrl)
+      .map(project => {
+        const id = project._id.toString();
+        return {
+          id,
+          title: project.title,
+          liveUrl: project.liveUrl,
+          clicks: clicksByProjectId[id] || 0,
+        };
+      });
     
     // Sort by clicks (descending)
     return result.sort((a, b) => b.clicks - a.clicks);

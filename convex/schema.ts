@@ -83,5 +83,24 @@ export default defineSchema({
     status: v.optional(v.string()), // For backward compatibility
     error: v.optional(v.string()),  // For backward compatibility
   })
-    .index("by_storageId", ["storageId"])
+    .index("by_storageId", ["storageId"]),
+
+  // Analytics table for tracking site usage
+  analytics: defineTable({
+    eventType: v.string(), // "pageview", "project_view", "live_click"
+    path: v.string(), // URL path
+    visitorId: v.optional(v.string()), // Unique visitor identifier 
+    projectId: v.optional(v.id("projects")), // Reference to project if applicable
+    referrer: v.optional(v.string()), // Where user came from
+    utmSource: v.optional(v.string()),
+    utmMedium: v.optional(v.string()),
+    utmCampaign: v.optional(v.string()),
+    device: v.string(), // "desktop", "tablet", "mobile"
+    timestamp: v.number() // When event occurred
+  })
+    .index("by_eventType", ["eventType"])
+    .index("by_projectId", ["projectId"])
+    .index("by_timestamp", ["timestamp"])
+    // Index for deduplication and unique visitor analytics
+    .index("byVisitor", ["visitorId", "eventType", "path", "timestamp"])
 });
