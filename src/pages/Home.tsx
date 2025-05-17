@@ -209,7 +209,8 @@ const Home = () => {
               
               <div className="space-y-2">
                 <h3 className="font-semibold">Contact:</h3>
-                <p>hello@dexor.dev</p>
+                <p>dexor8@gmail.com</p>
+                <p>+254 737611756</p>
                 <p>Nairobi, Kenya</p>
               </div>
             </div>

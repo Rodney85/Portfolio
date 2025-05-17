@@ -25,8 +25,6 @@ const AIChat: React.FC = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState('');
-  const [showWebhookInput, setShowWebhookInput] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,46 +52,11 @@ const AIChat: React.FC = () => {
     setInputMessage('');
     setIsTyping(true);
 
-    // If we have a webhook URL, send the message to n8n
-    if (webhookUrl) {
-      triggerWebhook(inputMessage);
-    } else {
-      // Simulated response
-      simulateAIResponse(inputMessage);
-    }
+    // Simulated response
+    simulateAIResponse(inputMessage);
   };
 
-  const triggerWebhook = async (message: string) => {
-    try {
-      // This would be the actual webhook call to your n8n workflow
-      console.log("Sending to webhook:", webhookUrl, message);
-      
-      // Simulate network request
-      setTimeout(() => {
-        // Add AI response
-        const aiResponse = getSimulatedResponse(message);
-        
-        const assistantMsg: Message = {
-          id: Date.now().toString(),
-          content: aiResponse,
-          sender: 'assistant',
-          timestamp: new Date()
-        };
-        
-        setMessages(prev => [...prev, assistantMsg]);
-        setIsTyping(false);
-      }, 1500);
-      
-    } catch (error) {
-      console.error("Error sending message to n8n:", error);
-      toast({
-        title: "Error",
-        description: "Failed to connect to the AI assistant. Please try again.",
-        variant: "destructive",
-      });
-      setIsTyping(false);
-    }
-  };
+
 
   const simulateAIResponse = (message: string) => {
     setTimeout(() => {
@@ -111,7 +74,7 @@ const AIChat: React.FC = () => {
     }, 1500);
   };
 
-  // Simple response simulation - this will be replaced by the actual n8n webhook
+  // Simple response simulation - provides helpful responses based on user input
   const getSimulatedResponse = (message: string): string => {
     message = message.toLowerCase();
     
@@ -134,51 +97,10 @@ const AIChat: React.FC = () => {
     }
   };
 
-  const handleWebhookSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!webhookUrl.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter your n8n webhook URL",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    toast({
-      title: "Connected",
-      description: "Your n8n webhook has been connected successfully!",
-    });
-    
-    setShowWebhookInput(false);
-  };
+
 
   return (
     <div className="flex flex-col h-[600px] border border-border rounded-lg overflow-hidden bg-background">
-      {/* Webhook input form (only shown initially) */}
-      {showWebhookInput && (
-        <motion.div 
-          className="p-4 bg-primary/5 border-b border-border"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <h4 className="font-medium mb-3">Connect your n8n Webhook</h4>
-          <p className="text-sm text-muted-foreground mb-3">
-            Enter your n8n webhook URL to connect your custom AI assistant.
-          </p>
-          <form onSubmit={handleWebhookSubmit} className="flex gap-2">
-            <Input
-              placeholder="https://your-n8n-instance/webhook/..."
-              value={webhookUrl}
-              onChange={(e) => setWebhookUrl(e.target.value)}
-              className="flex-1"
-            />
-            <Button type="submit">Connect</Button>
-          </form>
-        </motion.div>
-      )}
-      
       {/* Chat messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <AnimatePresence>

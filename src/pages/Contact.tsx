@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import SectionHeading from '@/components/ui/section-heading';
-import AIChat from '@/components/chat/AIChat';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -134,17 +133,17 @@ const Contact = () => {
                 <div className="space-y-4">
                   <div className="flex items-center">
                     <Mail className="h-5 w-5 text-primary mr-3" />
-                    <span>contact@example.com</span>
+                    <span>dexor8@gmail.com</span>
                   </div>
                   
                   <div className="flex items-center">
                     <Phone className="h-5 w-5 text-primary mr-3" />
-                    <span>+1 (555) 123-4567</span>
+                    <span>+254 737611756</span>
                   </div>
                   
                   <div className="flex items-center">
                     <MapPin className="h-5 w-5 text-primary mr-3" />
-                    <span>San Francisco, CA</span>
+                    <span>Nairobi, Kenya</span>
                   </div>
                 </div>
               </div>
@@ -154,14 +153,17 @@ const Contact = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-secondary/30 p-8 rounded-lg border border-border/50"
+              className="bg-secondary/30 p-8 rounded-lg border border-border/50 flex flex-col items-center justify-center h-full"
             >
-              <h3 className="text-xl font-bold mb-6">Chat with my AI Assistant</h3>
-              <p className="text-muted-foreground mb-8">
-                Get quick answers to your questions about my services, projects, or availability using my n8n-powered AI assistant.
-              </p>
-              
-              <AIChat />
+              <div className="text-center">
+                <h3 className="text-xl font-bold mb-3">Coming Soon</h3>
+                <p className="text-muted-foreground mb-4">
+                  The AI Assistant feature is currently under development.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  In the meantime, feel free to reach out to me directly using the contact information provided.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
