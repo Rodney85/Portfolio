@@ -350,7 +350,23 @@ export const getAllAnalytics = query({
  */
 export const clearAnalytics = mutation({
   handler: async (ctx) => {
-    // Security: Require admin access to clear analytics data
+    // In development, allow clearing data without authentication
+    if (process.env.NODE_ENV === 'development') {
+      console.log("Development mode: Allowing analytics clear without authentication");
+      
+      // Get all analytics events
+      const events = await ctx.db.query("analytics").collect();
+      
+      // Delete each event
+      for (const event of events) {
+        await ctx.db.delete(event._id);
+      }
+      
+      console.log(`Cleared ${events.length} analytics events in development mode`);
+      return { deleted: events.length };
+    }
+    
+    // In production, require proper authentication
     const identity = await ctx.auth.getUserIdentity();
     
     // No identity means not logged in
