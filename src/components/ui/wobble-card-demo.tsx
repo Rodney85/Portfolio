@@ -35,15 +35,17 @@ export function WobbleCardDemo() {
       </WobbleCard>
       <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-blue-900 min-h-[400px] lg:min-h-[300px]">
         <div className="w-full max-w-[90%] sm:max-w-sm md:max-w-lg">
-          <div className="relative">
-            <h2 className="text-left text-balance text-xl font-semibold tracking-[-0.015em] text-white lg:text-3xl">
-              AI-powered tools that take your business to the next level
-            </h2>
-            <span className="absolute -top-2 -right-2 bg-blue-500/80 text-white text-xs px-2 py-0.5 rounded-full font-medium transform -rotate-3 shadow-sm">Coming Soon</span>
-          </div>
+          <h2 className="text-left text-balance text-xl font-semibold tracking-[-0.015em] text-white lg:text-3xl">
+            AI-powered tools that take your business to the next level
+          </h2>
           <p className="mt-4 text-left text-sm/6 sm:text-base/6 text-neutral-200">
             Leverage the power of artificial intelligence to automate tasks, gain insights, and make data-driven decisions.
           </p>
+          
+          {/* Coming Soon badge positioned at the bottom */}
+          <div className="mt-6 mb-2">
+            <span className="inline-block bg-blue-500/80 text-white text-xs px-2 py-0.5 rounded-full font-medium transform -rotate-1 shadow-sm">Coming Soon</span>
+          </div>
         </div>
         <div className="absolute -right-10 md:-right-[40%] lg:-right-[20%] -bottom-10 w-[300px] h-[300px] opacity-70 hidden sm:block">
           {/* Replaced with a div to fix Lottie errors */}

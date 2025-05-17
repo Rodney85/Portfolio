@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import LottieAnimation from '@/components/ui/lottie-animation'
 import { HeroHeader } from './HeroHeader'
+import DotBackground from '@/components/ui/dot-background-demo'
 
 const transitionVariants = {
     item: {
@@ -37,6 +38,7 @@ export function HeroSection() {
             <main className="overflow-hidden">
                 <section>
                     <div className="relative pt-24">
+
                         <div className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--background)_75%)]"></div>
                         {/* Top-right blob */}
                         <motion.div 
@@ -124,8 +126,14 @@ export function HeroSection() {
                                     className="bg-gradient-to-b to-background absolute inset-0 z-10 from-transparent from-35%"
                                 />
                                 <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-5xl overflow-hidden rounded-2xl border p-4 shadow-lg shadow-zinc-950/15 ring-1">
-                                    {/* Use DotLottie animation instead of static image */}
+                                    {/* Add dotted background to the animation container */}
                                     <div className="relative w-full aspect-video sm:aspect-[4/3] md:aspect-[16/9] max-w-4xl mx-auto overflow-hidden">
+                                        {/* Dotted background with fade at bottom */}
+                                        <div className="absolute inset-0 -z-10 overflow-hidden">
+                                            <DotBackground className="h-full w-full" />
+                                            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-background to-transparent"></div>
+                                        </div>
+                                        
                                         <motion.div
                                             animate={{ 
                                                 y: [0, -15, 0],
@@ -135,7 +143,7 @@ export function HeroSection() {
                                                 duration: 6,
                                                 ease: "easeInOut"
                                             }}
-                                            className="w-full h-full flex justify-center items-center"
+                                            className="w-full h-full flex justify-center items-center relative z-10"
                                         >
                                             <LottieAnimation 
                                                 src="https://lottie.host/580a4395-b55d-4d89-aa93-7ce4126015cb/Fpxn7zdf88.lottie" 

@@ -11,7 +11,7 @@ import { ThemeToggle } from '../theme/ThemeToggle'
 const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
-    { name: 'About Us', path: '/process', description: 'here we are going to describe our services' },
+    { name: 'About Us', path: '/about', description: 'Learn more about our team and mission' },
     { name: 'Contact', path: '/contact' },
 ]
 
@@ -70,7 +70,11 @@ export function HeroHeader() {
                                 </span>
                             </Link>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-4">
+                                {/* Mobile-only theme toggle */}
+                                <div className="lg:hidden z-20 mr-1">
+                                    <ThemeToggle />
+                                </div>
                                 
                                 <button
                                     onClick={() => setMenuState(!menuState)}
@@ -115,7 +119,10 @@ export function HeroHeader() {
                                 </ul>
                             </div>
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit items-center">
-                                <ThemeToggle />
+                                {/* Desktop-only theme toggle */}
+                                <div className="hidden lg:block">
+                                    <ThemeToggle />
+                                </div>
                                 <Button
                                     asChild
                                     className="bg-orange-500 hover:bg-orange-600"

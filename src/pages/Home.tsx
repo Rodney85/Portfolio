@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Smartphone, Code, LayoutGrid as LayoutIcon, Clock, Bot, Gitlab, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import SectionHeading from '@/components/ui/section-heading';
@@ -12,24 +13,45 @@ import { api } from '@/convex/_generated/api';
 import LottieAnimation from '@/components/ui/lottie-animation';
 import { HeroSection } from '@/components/layout/HeroSection';
 import { WobbleCardDemo } from '@/components/ui/wobble-card-demo';
+import DotBackground from '@/components/ui/dot-background-demo';
 
 const Home = () => {
   // Stats section removed
   
-  // Fetch projects from Convex
-  const convexProjects = useQuery(api.projects.getAll as any);
-  const [recentProjects, setRecentProjects] = useState<any[]>([]);
+  // Define the project type that matches ProjectCard's expected props
+  interface Project {
+    id: string;
+    _id: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    desktopImageUrl: string;
+    tabletImageUrl: string;
+    mobileImageUrl: string;
+    storageId: string;
+    desktopStorageId: string;
+    tabletStorageId: string;
+    mobileStorageId: string;
+    additionalImages: string[];
+    tags: string[];
+    githubUrl: string;
+    liveUrl: string;
+  }
+
+  // Fetch projects from Convex with proper typing
+  const convexProjects = useQuery(api.projects.getAll as any) as Project[] | undefined;
+  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
   
   // Process projects when they arrive from Convex
   useEffect(() => {
     if (convexProjects && convexProjects.length > 0) {
       // Convert Convex projects to our ProjectProps format
-      const projects = convexProjects.map(project => ({
+      const projects: Project[] = convexProjects.map(project => ({
         // ID and basic info
-        id: project._id,
-        _id: project._id, // Keep the original _id for reference
-        title: project.title,
-        description: project.description,
+        id: project._id, // Required by ProjectCard
+        _id: project._id,
+        title: project.title || 'Untitled Project',
+        description: project.description || '',
         
         // Image URLs - include all possible image sources
         imageUrl: project.imageUrl || '',
@@ -44,18 +66,16 @@ const Home = () => {
         mobileStorageId: project.mobileStorageId || '',
         
         // Additional data
-        additionalImages: project.additionalImages || [],
-        tags: project.tags,
+        additionalImages: Array.isArray(project.additionalImages) ? project.additionalImages : [],
+        tags: Array.isArray(project.tags) ? project.tags : [],
         githubUrl: project.githubUrl || '',
         liveUrl: project.liveUrl || ''
       }));
       
       // Sort by most recent and take up to 3
-      const sorted = [...projects].sort((a, b) => {
-        // Use the ID for sorting as a proxy for creation time
-        // Convex IDs are time-based
-        return b.id.localeCompare(a.id);
-      }).slice(0, 3);
+      const sorted = [...projects]
+        .sort((a, b) => b._id.localeCompare(a._id))
+        .slice(0, 3);
       
       setRecentProjects(sorted);
     }
@@ -104,8 +124,8 @@ const Home = () => {
       </section>
 
       {/* Featured Projects Section */}
-      <section className="py-16 bg-secondary/30">
-        <div className="container-custom">
+      <DotBackground className="py-16">
+        <div className="container-custom relative z-10">
           <SectionHeading 
             title="Featured Work"
             subtitle="See how we've helped businesses just like yours"
@@ -114,8 +134,8 @@ const Home = () => {
           {recentProjects.length > 0 ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                {recentProjects.map((project, index) => (
-                  <ProjectCard key={project.id} project={project} index={index} />
+                {recentProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} index={recentProjects.indexOf(project)} />
                 ))}
               </div>
               <div className="flex justify-center mt-8">
@@ -135,7 +155,7 @@ const Home = () => {
             <EmptyProjects />
           )}
         </div>
-      </section>
+      </DotBackground>
 
       {/* Ready To Fix Your Workflow Section */}
       <section className="py-16 bg-primary/10 dark:bg-primary/5 text-foreground dark:text-white">
